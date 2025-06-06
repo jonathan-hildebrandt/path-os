@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "path-os",
+    "name": "PathOS",
     "slug": "path-os",
     "version": "1.0.0",
-    "scheme": "your-app-scheme",
+    "scheme": "path-os-scheme",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
