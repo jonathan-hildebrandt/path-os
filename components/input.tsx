@@ -65,6 +65,11 @@ export default function Input({
       ? styles.invalidFocusedLight
       : styles.invalidFocusedDark;
 
+  const themePlaceholderStyle =
+    colorScheme === 'light'
+      ? lightTheme.mutedForeground
+      : darkTheme.mutedForeground;
+
   const inputType = inputTypeMap[type];
 
   return (
@@ -79,11 +84,7 @@ export default function Input({
         style,
       ]}
       maxLength={maxLength}
-      placeholderTextColor={
-        colorScheme === 'light'
-          ? lightTheme.mutedForeground
-          : darkTheme.mutedForeground
-      }
+      placeholderTextColor={themePlaceholderStyle}
       onFocus={() => setFocused(true)}
       onBlur={() => setFocused(false)}
       onChangeText={(text) => setValue(text)}
