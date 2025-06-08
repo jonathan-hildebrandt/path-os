@@ -33,7 +33,7 @@ export default function TabLayout() {
         name='index'
         options={{
           headerShown: false,
-          title: 'Home',
+          title: 'Run',
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
               name={focused ? 'fitness' : 'fitness'}
@@ -44,9 +44,9 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name='workouts'
+        name='activity'
         options={{
-          title: 'Workouts',
+          title: 'Activity',
           headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
