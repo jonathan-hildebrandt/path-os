@@ -6,9 +6,9 @@ import {
 } from 'react-native';
 import { darkTheme, lightTheme, radius } from '../../theme';
 import { useState } from 'react';
-import Button from '../../components/button';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import StartScreen from '../../components/start-screen';
+import RunningScreen from '../../components/running-screen';
 
 export default function HomeScreen() {
   const colorScheme = useColorScheme();
@@ -27,13 +27,7 @@ export default function HomeScreen() {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={[styles.safeAreaView, themeSafeAreaViewStyle]}>
         {isRunning ? (
-          <Button
-            variant='destructive'
-            onPress={() => {
-              setIsRunning(false);
-            }}
-            text={'Stop'}
-          />
+          <RunningScreen setIsRunning={setIsRunning} />
         ) : (
           <StartScreen
             mode={mode}
