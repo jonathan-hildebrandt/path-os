@@ -16,6 +16,8 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
 
   const [locations, setLocations] = useState<Location.LocationObject[]>([]);
 
+  const [timer, setTimer] = useState(0);
+
   const [startDate, setStartDate] = useState<Date | null>(null);
 
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -26,7 +28,6 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
   useEffect(() => {
     startTracking();
     setStartDate(new Date());
-    startCounting();
 
     return () => {
       if (subscription) {
@@ -37,20 +38,19 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
       setStartDate(null);
     };
   }, []);
+ 
 
-  const startCounting = () => {
-    const interval = setInterval(() => {
-      if (startDate) {
-        const elapsed = intervalToDuration({
-          start: startDate,
-          end: new Date(),
-        });
-        console.log('Elapsed time:', elapsed);
-      }
-    }, 1000);
+  useEffect(() => {
+    const startTime = Date.now();
+
+    const updateElapsedTime = () => { 
+      setTimer((Date.now() - startTime));
+    }; 
+
+    const interval = setInterval(updateElapsedTime, 1000);
 
     return () => clearInterval(interval);
-  };
+  }, []);
 
   const startTracking = async () => {
     const { status } = await Location.requestForegroundPermissionsAsync();
@@ -110,12 +110,7 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
         {locations[0] ? (
           <Text style={[styles.text, themeTextStyle]}>
             Time Elapsed:{' '}
-            {JSON.stringify(
-              intervalToDuration({
-                start: new Date(locations[0].timestamp),
-                end: new Date(),
-              })
-            )}
+            {millisToMinutesAndSeconds(timer)}
           </Text>
         ) : (
           <Text style={[styles.text, themeTextStyle]}>Time Elapsed: --:--</Text>
@@ -137,6 +132,12 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
       <StatusBar />
     </View>
   );
+}
+
+function millisToMinutesAndSeconds(millis: number): string {
+  const minutes = Math.floor(millis / 60000);
+  const seconds = Number(((millis % 60000) / 1000).toFixed(0));
+  return (minutes < 10 ? '0' : '') + minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
 }
 
 const styles = StyleSheet.create({
