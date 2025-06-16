@@ -108,23 +108,20 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
   return (
     <View style={[styles.container, themeContainerStyle]}>
       <Text style={[styles.text, themeTextStyle]}>
-        Total Distance: {getTotalDistanceInKilometers(locations).toFixed(2)} km
+        Kilometers: {getTotalDistanceInKilometers(locations).toFixed(2)}
       </Text>
       <Text style={[styles.text, themeTextStyle]}>
-        {locations[0] ? (
+        {locations[0] && (
           <Text style={[styles.text, themeTextStyle]}>
-            Time Elapsed: {msToMinutesAndSeconds(timer)}
+            Time: {msToMinutesAndSeconds(timer)}
           </Text>
-        ) : (
-          <Text style={[styles.text, themeTextStyle]}>Time Elapsed: --:--</Text>
         )}
       </Text>
       <Text style={[styles.text, themeTextStyle]}>
-        Average Pace: {getAvgPace(locations, startDate, new Date()).toFixed(2)}{' '}
-        min/km
+        Avg. Pace: {getAvgPace(locations, startDate, new Date()).toFixed(2)}
       </Text>
       <Text style={[styles.text, themeTextStyle]}>
-        Current Pace: {getPace(locations).toFixed(2)} min/km
+        Pace: {getPace(locations).toFixed(2)}
       </Text>
       {subscription && (
         <Button
