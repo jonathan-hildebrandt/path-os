@@ -5,7 +5,7 @@ export const lightTheme = {
   cardForeground: '#0a0a0a',
   popover: '#ffffff',
   popoverForeground: '#0a0a0a',
-  primary: '#047857',
+  primary: '#369379',
   primaryForeground: '#fafafa',
   secondary: '#f5f5f5',
   secondaryForeground: '#171717',
@@ -16,7 +16,7 @@ export const lightTheme = {
   destructive: '#e7000b',
   border: '#e5e5e5',
   input: '#e5e5e5',
-  ring: '#a1a1a1',
+  ring: '#369379',
   chart1: '#f54a00',
   chart2: '#009689',
   chart3: '#104e64',
@@ -24,12 +24,12 @@ export const lightTheme = {
   chart5: '#fd9a00',
   sidebar: '#fafafa',
   sidebarForeground: '#0a0a0a',
-  sidebarPrimary: '#171717',
+  sidebarPrimary: '#369379',
   sidebarPrimaryForeground: '#fafafa',
   sidebarAccent: '#f5f5f5',
   sidebarAccentForeground: '#171717',
   sidebarBorder: '#e5e5e5',
-  sidebarRing: '#a1a1a1',
+  sidebarRing: '#369379',
 };
 
 export type Theme = typeof lightTheme;
@@ -52,7 +52,7 @@ export const darkTheme: Theme = {
   destructive: '#ff6467',
   border: '#ffffff1a',
   input: '#ffffff26',
-  ring: '#737373',
+  ring: '#047857',
   chart1: '#1447e6',
   chart2: '#00bc7d',
   chart3: '#fd9a00',
@@ -60,12 +60,12 @@ export const darkTheme: Theme = {
   chart5: '#ff2056',
   sidebar: '#171717',
   sidebarForeground: '#fafafa',
-  sidebarPrimary: '#1447e6',
+  sidebarPrimary: '#047857',
   sidebarPrimaryForeground: '#fafafa',
   sidebarAccent: '#262626',
   sidebarAccentForeground: '#fafafa',
   sidebarBorder: '#ffffff1a',
-  sidebarRing: '#737373',
+  sidebarRing: '#047857',
 };
 
 export const radius = 10;

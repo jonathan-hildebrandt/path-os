@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { Text, View, StyleSheet, useColorScheme } from 'react-native';
 import { darkTheme, lightTheme, radius } from '../../theme';
 
-export default function WorkoutsScreen() {
+export default function ActivityScreen() {
   const colorScheme = useColorScheme();
 
   const themeTextStyle =
@@ -12,7 +12,7 @@ export default function WorkoutsScreen() {
 
   return (
     <View style={[styles.container, themeContainerStyle]}>
-      <Text style={[styles.text, themeTextStyle]}>Workouts Screen</Text>
+      <Text style={[styles.text, themeTextStyle]}>Activity Screen</Text>
       <StatusBar />
     </View>
   );

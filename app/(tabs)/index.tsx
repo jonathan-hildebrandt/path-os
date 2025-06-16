@@ -1,28 +1,54 @@
-import { StatusBar } from 'expo-status-bar';
-import { Text, View, StyleSheet, useColorScheme } from 'react-native';
+import {
+  StyleSheet,
+  useColorScheme,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 import { darkTheme, lightTheme, radius } from '../../theme';
+import { useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import StartScreen from '../../components/start-screen';
+import RunningScreen from '../../components/running-screen';
 
 export default function HomeScreen() {
   const colorScheme = useColorScheme();
 
-  const themeTextStyle =
-    colorScheme === 'light' ? styles.lightThemeText : styles.darkThemeText;
-  const themeContainerStyle =
-    colorScheme === 'light' ? styles.lightContainer : styles.darkContainer;
+  const [mode, setMode] = useState<'Distance' | 'Time'>('Distance');
+  const [isRunning, setIsRunning] = useState<boolean>(false);
+  const [distance, setDistance] = useState<string>('');
+  const [time, setTime] = useState<string>('');
+
+  const themeSafeAreaViewStyle =
+    colorScheme === 'light'
+      ? styles.lightSafeAreaView
+      : styles.darkSafeAreaView;
 
   return (
-    <View style={[styles.container, themeContainerStyle]}>
-      <Text style={[styles.text, themeTextStyle]}>Home Screen</Text>
-      <StatusBar />
-    </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <SafeAreaView style={[styles.safeAreaView, themeSafeAreaViewStyle]}>
+        {isRunning ? (
+          <RunningScreen setIsRunning={setIsRunning} />
+        ) : (
+          <StartScreen
+            mode={mode}
+            setMode={setMode}
+            distance={distance}
+            setDistance={setDistance}
+            time={time}
+            setTime={setTime}
+            setIsRunning={setIsRunning}
+          />
+        )}
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeAreaView: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
   },
   text: {
     fontSize: 20,
@@ -30,18 +56,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: radius,
   },
-  lightContainer: {
+  lightSafeAreaView: {
     backgroundColor: lightTheme.background,
   },
-  darkContainer: {
+  darkSafeAreaView: {
     backgroundColor: darkTheme.background,
-  },
-  lightThemeText: {
-    color: lightTheme.foreground,
-    borderColor: lightTheme.border,
-  },
-  darkThemeText: {
-    color: darkTheme.foreground,
-    borderColor: darkTheme.border,
   },
 });
