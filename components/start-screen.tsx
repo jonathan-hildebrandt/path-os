@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import Input from './input';
 import Button from './button';
 import Tabs from './tabs';
@@ -17,17 +17,22 @@ type StartScreenProps = {
 export default function StartScreen({
   mode,
   setMode,
-  distance,
   setDistance,
-  time,
   setTime,
+  distance,
+  time,
   setIsRunning,
 }: StartScreenProps) {
   return (
     <>
+      <Text>Your Goal</Text>
+      <Tabs<'Distance' | 'Time'>
+        selectedTab={mode}
+        setSelectedTab={setMode}
+        tabs={['Distance', 'Time']}
+      />
       <Input
         value={mode === 'Distance' ? distance : time}
-        invalid={!distance && !time}
         setValue={mode === 'Distance' ? setDistance : setTime}
         textAlign='center'
         maxLength={3}
@@ -36,34 +41,24 @@ export default function StartScreen({
         }
         type='number'
       />
-      <View style={styles.container}>
-        <Button
-          variant='default'
-          disabled={!distance && !time}
-          style={{
-            borderRadius: '100%',
-            width: 100,
-            height: 100,
-          }}
-          textStyle={{
-            fontSize: 24,
-            lineHeight: 32,
-            fontWeight: 'bold',
-            textAlign: 'center',
-          }}
-          onPress={() => {
-            setIsRunning(true);
-          }}
-          text={'Start'}
-        />
-      </View>
-      <View style={styles.bottomContainer}>
-        <Tabs<'Distance' | 'Time'>
-          selectedTab={mode}
-          setSelectedTab={setMode}
-          tabs={['Distance', 'Time']}
-        />
-      </View>
+      <Button
+        variant={'default'}
+        style={{
+          borderRadius: '100%',
+          width: 100,
+          height: 100,
+        }}
+        textStyle={{
+          fontSize: 24,
+          lineHeight: 32,
+          fontWeight: 'bold',
+          textAlign: 'center',
+        }}
+        onPress={() => {
+          setIsRunning(true);
+        }}
+        text={'Start'}
+      />
     </>
   );
 }

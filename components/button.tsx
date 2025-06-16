@@ -18,6 +18,7 @@ type ButtonProps = {
   textStyle?: TextStyle;
   variant?:
     | 'default'
+    | 'dark'
     | 'destructive'
     | 'outline'
     | 'secondary'
@@ -101,6 +102,9 @@ const variantLightStyles = StyleSheet.create({
   default: {
     backgroundColor: lightTheme.primary,
   },
+  dark: {
+    backgroundColor: lightTheme.foreground,
+  },
   destructive: {
     backgroundColor: lightTheme.destructive,
   },
@@ -119,6 +123,9 @@ const variantLightStyles = StyleSheet.create({
 const pressedVariantLightStyles = StyleSheet.create({
   default: {
     backgroundColor: applyHexOpacity(lightTheme.primary, 90),
+  },
+  dark: {
+    backgroundColor: applyHexOpacity(lightTheme.foreground, 90),
   },
   destructive: {
     backgroundColor: applyHexOpacity(lightTheme.destructive, 90),
@@ -140,6 +147,9 @@ const textVariantLightStyles = StyleSheet.create({
   default: {
     color: lightTheme.primaryForeground,
   },
+  dark: {
+    color: lightTheme.background,
+  },
   destructive: {
     color: lightTheme.primaryForeground,
   },
@@ -160,6 +170,7 @@ const textVariantLightStyles = StyleSheet.create({
 const textVariantPressableLightStyles = StyleSheet.create({
   default: {},
   destructive: {},
+  dark: {},
   outline: {
     color: lightTheme.accentForeground,
   },
@@ -174,6 +185,9 @@ const textVariantPressableLightStyles = StyleSheet.create({
 const variantDarkStyles = StyleSheet.create({
   default: {
     backgroundColor: darkTheme.primary,
+  },
+  dark: {
+    backgroundColor: darkTheme.background,
   },
   destructive: {
     backgroundColor: applyHexOpacity(darkTheme.destructive, 50),
@@ -194,6 +208,9 @@ const pressedVariantDarkStyles = StyleSheet.create({
   default: {
     backgroundColor: applyHexOpacity(darkTheme.primary, 90),
   },
+  dark: {
+    backgroundColor: applyHexOpacity(darkTheme.background, 90),
+  },
   destructive: {
     backgroundColor: applyHexOpacity(darkTheme.destructive, 40),
   },
@@ -213,6 +230,9 @@ const pressedVariantDarkStyles = StyleSheet.create({
 const textVariantDarkStyles = StyleSheet.create({
   default: {
     color: darkTheme.primaryForeground,
+  },
+  dark: {
+    color: darkTheme.foreground,
   },
   destructive: {
     color: '#fff',
@@ -235,6 +255,7 @@ const textVariantDarkStyles = StyleSheet.create({
 
 const textVariantPressableDarkStyles = StyleSheet.create({
   default: {},
+  dark: {},
   destructive: {},
   outline: {
     color: darkTheme.accentForeground,

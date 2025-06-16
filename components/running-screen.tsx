@@ -3,7 +3,12 @@ import { StatusBar } from 'expo-status-bar';
 import { Text, View, StyleSheet, useColorScheme } from 'react-native';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { intervalToDuration } from 'date-fns';
-import { getAvgPace, getTotalDistanceInKilometers } from '../calculate';
+import {
+  getAvgPace,
+  getPace,
+  getTotalDistanceInKilometers,
+  msToMinutesAndSeconds,
+} from '../calculate';
 import Button from './button';
 import { darkTheme, lightTheme, radius } from '../theme';
 
@@ -38,21 +43,20 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
       setStartDate(null);
     };
   }, []);
- 
 
   useEffect(() => {
     const startTime = Date.now();
 
-    const updateElapsedTime = () => { 
-      setTimer((Date.now() - startTime));
-    }; 
+    const updateElapsedTime = () => {
+      setTimer(Date.now() - startTime);
+    };
 
     const interval = setInterval(updateElapsedTime, 1000);
 
     return () => clearInterval(interval);
   }, []);
 
-  const startTracking = async () => {
+  async function startTracking() {
     const { status } = await Location.requestForegroundPermissionsAsync();
 
     if (status !== 'granted') {
@@ -63,8 +67,8 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
     const subscription = await Location.watchPositionAsync(
       {
         accuracy: Location.Accuracy.Highest,
-        // distanceInterval: 5,
         timeInterval: 1000,
+        distanceInterval: 5,
       },
       (location) => {
         setLocations((prevLocations) => [...prevLocations, location]);
@@ -77,7 +81,7 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
     );
 
     setSubscription(subscription);
-  };
+  }
 
   function stopTracking() {
     if (subscription) {
@@ -109,8 +113,7 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
       <Text style={[styles.text, themeTextStyle]}>
         {locations[0] ? (
           <Text style={[styles.text, themeTextStyle]}>
-            Time Elapsed:{' '}
-            {millisToMinutesAndSeconds(timer)}
+            Time Elapsed: {msToMinutesAndSeconds(timer)}
           </Text>
         ) : (
           <Text style={[styles.text, themeTextStyle]}>Time Elapsed: --:--</Text>
@@ -120,9 +123,13 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
         Average Pace: {getAvgPace(locations, startDate, new Date()).toFixed(2)}{' '}
         min/km
       </Text>
+      <Text style={[styles.text, themeTextStyle]}>
+        Current Pace: {getPace(locations).toFixed(2)} min/km
+      </Text>
       {subscription && (
         <Button
-          text='Stop Tracking'
+          variant='dark'
+          text='Stop'
           onPress={() => {
             stopTracking();
             setIsRunning(false);
@@ -134,15 +141,10 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
   );
 }
 
-function millisToMinutesAndSeconds(millis: number): string {
-  const minutes = Math.floor(millis / 60000);
-  const seconds = Number(((millis % 60000) / 1000).toFixed(0));
-  return (minutes < 10 ? '0' : '') + minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
-}
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: lightTheme.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
