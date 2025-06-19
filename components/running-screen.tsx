@@ -27,8 +27,6 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
 
   const [timer, setTimer] = useState(0);
 
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
   const [isPaused, setIsPaused] = useState(false);
 
   const subscriptionRef = useRef<Location.LocationSubscription | null>(null);
@@ -52,7 +50,8 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
     };
   }, []);
 
-  // Start a timer to track the elapsed time since the component mounted
+  // Start a timer to track the elapsed time since the component mounted or resumed
+  // If the tracking is paused, the timer will not increment
   useEffect(() => {
     if (isPaused) return;
 
@@ -67,7 +66,7 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
     const { status } = await Location.requestForegroundPermissionsAsync();
 
     if (status !== 'granted') {
-      setErrorMsg('Permission to access location was denied');
+      setIsRunning(false);
       return;
     }
 
@@ -88,9 +87,6 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
       },
       (error) => {
         console.error('Error watching position:', error);
-        setErrorMsg(
-          error ?? 'An unknown error occurred while tracking location'
-        );
       }
     );
 
@@ -125,50 +121,73 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
 
   const themeTextStyle =
     colorScheme === 'light' ? styles.lightThemeText : styles.darkThemeText;
-  const themeContainerStyle =
-    colorScheme === 'light' ? styles.lightContainer : styles.darkContainer;
 
   return (
-    <View style={[styles.container, themeContainerStyle]}>
-      {errorMsg && (
-        <Text style={[styles.text, themeTextStyle]}>Error: {errorMsg}</Text>
-      )}
-      <Text style={[styles.text, themeTextStyle]}>
-        Kilometers: {getTotalDistanceInKilometersString(locations)}
-      </Text>
-      {locations[0] && (
-        <Text style={[styles.text, themeTextStyle]}>
-          Time: {msToMinutesAndSeconds(timer)}
-        </Text>
-      )}
-      <Text style={[styles.text, themeTextStyle]}>
-        Avg. Pace: {getAvgPace(locations)}
-      </Text>
-      <Text style={[styles.text, themeTextStyle]}>
-        Pace: {getPace(locations)}
-      </Text>
-      <Button
-        variant='default'
-        text={isPaused ? 'Resume' : 'Pause'}
-        onPress={() => {
-          if (isPaused) {
-            resumeTracking();
-          } else {
-            pauseTracking();
-          }
-        }}
-      />
-      {isPaused && (
-        <Button
-          variant='dark'
-          text='Stop'
-          onPress={() => {
-            stopTracking();
+    <View style={[styles.container]}>
+      <View
+        style={{
+          flex: 1,
+          gap: 40,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            width: '100%',
+            paddingHorizontal: 20,
+          }}>
+          <Text style={[styles.text, themeTextStyle]}>
+            Time: {msToMinutesAndSeconds(timer)}
+          </Text>
+          <Text style={[styles.text, themeTextStyle]}>
+            Avg. Pace: {getAvgPace(locations)}
+          </Text>
+          <Text style={[styles.text, themeTextStyle]}>
+            Pace: {getPace(locations)}
+          </Text>
+        </View>
 
-            setIsRunning(false);
+        <Text style={[styles.text, themeTextStyle]}>
+          Kilometers: {getTotalDistanceInKilometersString(locations)}
+        </Text>
+      </View>
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'row',
+          gap: 20,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <Button
+          variant='default'
+          text={isPaused ? 'Resume' : 'Pause'}
+          style={{ width: 100, height: 40 }}
+          textStyle={{ fontSize: 18, lineHeight: 22, fontWeight: 'bold' }}
+          onPress={() => {
+            if (isPaused) {
+              resumeTracking();
+            } else {
+              pauseTracking();
+            }
           }}
         />
-      )}
+        {isPaused && (
+          <Button
+            variant='dark'
+            text='Stop'
+            style={{ width: 100, height: 40 }}
+            textStyle={{ fontSize: 18, lineHeight: 22, fontWeight: 'bold' }}
+            onPress={() => {
+              stopTracking();
+
+              setIsRunning(false);
+            }}
+          />
+        )}
+      </View>
       <StatusBar />
     </View>
   );
@@ -186,12 +205,6 @@ const styles = StyleSheet.create({
     padding: 10,
     borderWidth: 1,
     borderRadius: radius,
-  },
-  lightContainer: {
-    backgroundColor: lightTheme.background,
-  },
-  darkContainer: {
-    backgroundColor: darkTheme.background,
   },
   lightThemeText: {
     color: lightTheme.foreground,
