@@ -12,8 +12,8 @@ import Button from './button';
 import { darkTheme, lightTheme, radius } from '../lib/theme';
 import { completeRun, createRun, insertLocation } from '../lib/query';
 
-//TODO pause / resume functionality
-//TODO fix display of stats
+//TODO fix return value of stats
+//TODO fix positioning
 
 interface RunningScreenProps {
   setIsRunning: Dispatch<SetStateAction<boolean>>;
@@ -29,6 +29,8 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
   const [timer, setTimer] = useState(0);
 
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  const [isPaused, setIsPaused] = useState(false);
 
   const subscriptionRef = useRef<Location.LocationSubscription | null>(null);
 
@@ -109,6 +111,21 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
     setLocations([]);
   }
 
+  function pauseTracking() {
+    if (subscriptionRef.current) {
+      subscriptionRef.current.remove();
+      subscriptionRef.current = null;
+      setIsPaused(true);
+    }
+  }
+
+  function resumeTracking() {
+    if (runId !== null) {
+      startTracking(runId);
+      setIsPaused(false);
+    }
+  }
+
   const themeTextStyle =
     colorScheme === 'light' ? styles.lightThemeText : styles.darkThemeText;
   const themeContainerStyle =
@@ -133,7 +150,18 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
       <Text style={[styles.text, themeTextStyle]}>
         Pace: {getPace(locations).toFixed(2)}
       </Text>
-      {subscriptionRef.current && (
+      <Button
+        variant='default'
+        text={isPaused ? 'Resume' : 'Pause'}
+        onPress={() => {
+          if (isPaused) {
+            resumeTracking();
+          } else {
+            pauseTracking();
+          }
+        }}
+      />
+      {isPaused && (
         <Button
           variant='dark'
           text='Stop'
