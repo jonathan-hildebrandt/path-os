@@ -30,7 +30,16 @@ export const UncompletedRunSchema = z.object({
 
 export type UncompletedRun = z.infer<typeof UncompletedRunSchema>;
 
-export const SplitSchema = z.object({
+export const UncompletedSplitSchema = z.object({
+  runId: z.number().nonnegative(),
+  km: z.number().nonnegative(),
+  avgPaceInSeconds: z.number().nonnegative(),
+  elevationGainInMeters: z.number(),
+});
+
+export type UncompletedSplit = z.infer<typeof UncompletedSplitSchema>;
+
+export const CompletedSplitSchema = z.object({
   id: z.number().nonnegative(),
   runId: z.number().nonnegative(),
   km: z.number().nonnegative(),
@@ -38,7 +47,7 @@ export const SplitSchema = z.object({
   elevationGainInMeters: z.number(),
 });
 
-export type Split = z.infer<typeof SplitSchema>;
+export type CompletedSplit = z.infer<typeof CompletedSplitSchema>;
 
 export const CompletedLocationSchema = z.object({
   id: z.number().nonnegative(),

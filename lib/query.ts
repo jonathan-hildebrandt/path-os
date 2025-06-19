@@ -1,5 +1,6 @@
 import { getDb } from './db';
 import {
+  CompletedLocation,
   CompletedLocationSchema,
   CompletedRun,
   CompletedRunSchema,
@@ -8,7 +9,7 @@ import {
   UncompletedLocationSchema,
   UncompletedRunSchema,
 } from './model';
-import { calculateRunMetrics } from './metrics';
+import { calculateRunMetrics, calculateSplitMetrics } from './metrics';
 import { LocationObject } from 'expo-location';
 import { convertLocationObjectToLocation } from './utils';
 
@@ -155,6 +156,39 @@ export async function createRun(): Promise<number> {
 }
 
 /**
+ * Retrieves all locations for a specific run from the database.
+ * @param runId - The ID of the run to retrieve locations for.
+ * @returns Promise<CompletedLocation[]> An array of completed locations for the run.
+ */
+export async function getLocationsForRun(
+  runId: number
+): Promise<CompletedLocation[]> {
+  const db = await getDb();
+
+  const locations = await db.getAllAsync(
+    `SELECT * FROM location WHERE runId = ? ORDER BY timestamp ASC;`,
+    [runId]
+  );
+
+  return CompletedLocationSchema.array().parse(locations);
+}
+
+/**
+ * Deletes a run and all its associated locations and splits from the database.
+ */
+export async function deleteRun(runId: number): Promise<void> {
+  const db = await getDb();
+
+  try {
+    await db.runAsync(`DELETE FROM run WHERE id = ?;`, [runId]);
+    console.log(`✅ Run ${runId} deleted successfully.`);
+  } catch (error) {
+    console.error(`❌ Failed to delete run ${runId}:`, error);
+    throw error;
+  }
+}
+
+/**
  * Completes a run by updating its metrics in the database.
  * @param run The run to complete.
  * @returns Promise<void>
@@ -166,23 +200,24 @@ export async function completeRun(
   const db = await getDb();
 
   try {
-    const locations = await db.getAllAsync(
-      `SELECT * FROM location WHERE runId = ? ORDER BY timestamp ASC;`,
-      [runId]
-    );
+    const locations = await getLocationsForRun(runId);
 
-    const parsedLocations = CompletedLocationSchema.array().parse(locations);
-    if (parsedLocations.length === 0) {
-      console.warn(`⚠️ No locations for run ${runId}. Skipping.`);
+    if (locations.length === 0) {
+      console.warn(
+        `⚠️ No locations found for run ${runId}. Cannot complete run. Deleting run.`
+      );
+
+      await deleteRun(runId);
+
       return;
     }
 
-    const metrics = calculateRunMetrics(parsedLocations);
+    const metrics = calculateRunMetrics(locations);
 
     const completedRun: CompletedRun = {
       id: runId,
       status: aborted ? RunStatus.ABORTED : RunStatus.COMPLETED,
-      timestamp: parsedLocations.at(-1)!.timestamp,
+      timestamp: locations.at(-1)!.timestamp,
       ...metrics,
     };
 
@@ -211,8 +246,42 @@ export async function completeRun(
     );
 
     console.log(`✅ Run ${runId} completed successfully.`);
+
+    await insertSplits(runId);
   } catch (error) {
     console.error(`❌ Failed to complete run ${runId}:`, error);
+    throw error;
+  }
+}
+
+/**
+ * Inserts splits for a specific run into the database.
+ * @param runId - The ID of the run for which to insert splits.
+ * @returns Promise<void>
+ */
+export async function insertSplits(runId: number): Promise<void> {
+  const db = await getDb();
+
+  try {
+    const locations = await getLocationsForRun(runId);
+
+    const splits = calculateSplitMetrics(locations, runId);
+
+    if (splits.length === 0) {
+      console.warn(`⚠️ No splits to insert for run ${runId}.`);
+      return;
+    }
+
+    for (const split of splits) {
+      await db.runAsync(
+        `INSERT INTO split (runId, km, avgPaceInSeconds, elevationGainInMeters) VALUES (?, ?, ?, ?)`,
+        [runId, split.km, split.avgPaceInSeconds, split.elevationGainInMeters]
+      );
+    }
+
+    console.log(`✅ Splits inserted for run ${runId}.`);
+  } catch (error) {
+    console.error('❌ insertSplits failed:', error);
     throw error;
   }
 }

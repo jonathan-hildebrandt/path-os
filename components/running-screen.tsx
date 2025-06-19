@@ -2,17 +2,16 @@ import * as Location from 'expo-location';
 import { StatusBar } from 'expo-status-bar';
 import { Text, View, StyleSheet, useColorScheme } from 'react-native';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
-import {
-  getAvgPace,
-  getPace,
-  getTotalDistanceInKilometers,
-  msToMinutesAndSeconds,
-} from '../lib/location';
 import Button from './button';
 import { darkTheme, lightTheme, radius } from '../lib/theme';
 import { completeRun, createRun, insertLocation } from '../lib/query';
+import {
+  getAvgPace,
+  getPace,
+  getTotalDistanceInKilometersString,
+} from '../lib/location';
+import { msToMinutesAndSeconds } from '../lib/utils';
 
-//TODO fix return value of stats
 //TODO fix positioning
 
 interface RunningScreenProps {
@@ -55,16 +54,14 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
 
   // Start a timer to track the elapsed time since the component mounted
   useEffect(() => {
-    const startTime = Date.now();
+    if (isPaused) return;
 
-    const updateElapsedTime = () => {
-      setTimer(Date.now() - startTime);
-    };
-
-    const interval = setInterval(updateElapsedTime, 1000);
+    const interval = setInterval(() => {
+      setTimer((prev) => prev + 1000);
+    }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [isPaused]);
 
   async function startTracking(runId: number) {
     const { status } = await Location.requestForegroundPermissionsAsync();
@@ -137,7 +134,7 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
         <Text style={[styles.text, themeTextStyle]}>Error: {errorMsg}</Text>
       )}
       <Text style={[styles.text, themeTextStyle]}>
-        Kilometers: {getTotalDistanceInKilometers(locations).toFixed(2)}
+        Kilometers: {getTotalDistanceInKilometersString(locations)}
       </Text>
       {locations[0] && (
         <Text style={[styles.text, themeTextStyle]}>
@@ -145,10 +142,10 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
         </Text>
       )}
       <Text style={[styles.text, themeTextStyle]}>
-        Avg. Pace: {getAvgPace(locations).toFixed(2)}
+        Avg. Pace: {getAvgPace(locations)}
       </Text>
       <Text style={[styles.text, themeTextStyle]}>
-        Pace: {getPace(locations).toFixed(2)}
+        Pace: {getPace(locations)}
       </Text>
       <Button
         variant='default'
