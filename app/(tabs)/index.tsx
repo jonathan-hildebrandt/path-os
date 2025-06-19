@@ -4,7 +4,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-import { darkTheme, lightTheme, radius } from '../../theme';
+import { darkTheme, lightTheme, radius } from '../../lib/theme';
 import { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import StartScreen from '../../components/start-screen';

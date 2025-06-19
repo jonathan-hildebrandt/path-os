@@ -1,16 +1,19 @@
 import * as Location from 'expo-location';
 import { StatusBar } from 'expo-status-bar';
 import { Text, View, StyleSheet, useColorScheme } from 'react-native';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { intervalToDuration } from 'date-fns';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import {
   getAvgPace,
   getPace,
   getTotalDistanceInKilometers,
   msToMinutesAndSeconds,
-} from '../calculate';
+} from '../lib/location';
 import Button from './button';
-import { darkTheme, lightTheme, radius } from '../theme';
+import { darkTheme, lightTheme, radius } from '../lib/theme';
+import { completeRun, createRun, insertLocation } from '../lib/query';
+
+//TODO pause / resume functionality
+//TODO fix display of stats
 
 interface RunningScreenProps {
   setIsRunning: Dispatch<SetStateAction<boolean>>;
@@ -21,29 +24,34 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
 
   const [locations, setLocations] = useState<Location.LocationObject[]>([]);
 
-  const [timer, setTimer] = useState(0);
+  const [runId, setRunId] = useState<number | null>(null);
 
-  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [timer, setTimer] = useState(0);
 
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const [subscription, setSubscription] =
-    useState<Location.LocationSubscription | null>(null);
+  const subscriptionRef = useRef<Location.LocationSubscription | null>(null);
 
+  // Create a new run when the component mounts
   useEffect(() => {
-    startTracking();
-    setStartDate(new Date());
+    async function init() {
+      const newRunId = await createRun();
+
+      setRunId(newRunId);
+
+      startTracking(newRunId);
+    }
+
+    init();
 
     return () => {
-      if (subscription) {
-        subscription.remove();
-      }
-      setSubscription(null);
+      subscriptionRef.current?.remove();
+      subscriptionRef.current = null;
       setLocations([]);
-      setStartDate(null);
     };
   }, []);
 
+  // Start a timer to track the elapsed time since the component mounted
   useEffect(() => {
     const startTime = Date.now();
 
@@ -56,7 +64,7 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
     return () => clearInterval(interval);
   }, []);
 
-  async function startTracking() {
+  async function startTracking(runId: number) {
     const { status } = await Location.requestForegroundPermissionsAsync();
 
     if (status !== 'granted') {
@@ -70,34 +78,35 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
         timeInterval: 1000,
         distanceInterval: 5,
       },
-      (location) => {
+      async (location) => {
         setLocations((prevLocations) => [...prevLocations, location]);
-        console.log('New location:', location);
+        insertLocation(runId, location);
+        console.log(
+          'Location updated:',
+          location.coords.latitude,
+          location.coords.longitude
+        );
       },
       (error) => {
         console.error('Error watching position:', error);
-        setErrorMsg(error);
+        setErrorMsg(
+          error ?? 'An unknown error occurred while tracking location'
+        );
       }
     );
 
-    setSubscription(subscription);
+    subscriptionRef.current = subscription;
   }
 
   function stopTracking() {
-    if (subscription) {
-      subscription.remove();
+    subscriptionRef.current?.remove();
+    subscriptionRef.current = null;
+
+    if (runId !== null) {
+      completeRun(runId);
     }
 
-    setSubscription(null);
     setLocations([]);
-    setStartDate(null);
-  }
-
-  let text = 'Waiting...';
-  if (errorMsg) {
-    text = errorMsg;
-  } else if (location) {
-    text = JSON.stringify(location);
   }
 
   const themeTextStyle =
@@ -107,28 +116,30 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
 
   return (
     <View style={[styles.container, themeContainerStyle]}>
+      {errorMsg && (
+        <Text style={[styles.text, themeTextStyle]}>Error: {errorMsg}</Text>
+      )}
       <Text style={[styles.text, themeTextStyle]}>
         Kilometers: {getTotalDistanceInKilometers(locations).toFixed(2)}
       </Text>
+      {locations[0] && (
+        <Text style={[styles.text, themeTextStyle]}>
+          Time: {msToMinutesAndSeconds(timer)}
+        </Text>
+      )}
       <Text style={[styles.text, themeTextStyle]}>
-        {locations[0] && (
-          <Text style={[styles.text, themeTextStyle]}>
-            Time: {msToMinutesAndSeconds(timer)}
-          </Text>
-        )}
-      </Text>
-      <Text style={[styles.text, themeTextStyle]}>
-        Avg. Pace: {getAvgPace(locations, startDate, new Date()).toFixed(2)}
+        Avg. Pace: {getAvgPace(locations).toFixed(2)}
       </Text>
       <Text style={[styles.text, themeTextStyle]}>
         Pace: {getPace(locations).toFixed(2)}
       </Text>
-      {subscription && (
+      {subscriptionRef.current && (
         <Button
           variant='dark'
           text='Stop'
           onPress={() => {
             stopTracking();
+
             setIsRunning(false);
           }}
         />

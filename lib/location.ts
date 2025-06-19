@@ -1,4 +1,4 @@
-import { differenceInMinutes, differenceInSeconds } from 'date-fns';
+import { differenceInMinutes } from 'date-fns';
 import { LocationObject } from 'expo-location';
 import { getDistance } from 'geolib';
 
@@ -68,16 +68,15 @@ export function getPace(locations: LocationObject[]): number {
   return pace;
 }
 
-export function getAvgPace(
-  locations: LocationObject[],
-  startDate: Date | null,
-  endDate: Date
-): number {
-  if (locations.length < 2 || !startDate || !endDate) {
+export function getAvgPace(locations: LocationObject[]): number {
+  if (locations.length < 2) {
     return 0;
   }
 
   const totalDistance = getTotalDistanceInKilometers(locations);
+
+  const startDate = new Date(locations[0].timestamp);
+  const endDate = new Date(locations[locations.length - 1].timestamp);
 
   const avgPaceInMinutes =
     differenceInMinutes(endDate, startDate) / totalDistance;

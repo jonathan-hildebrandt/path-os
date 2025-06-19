@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { Text, View, StyleSheet, useColorScheme } from 'react-native';
-import { darkTheme, lightTheme, radius } from '../../theme';
+import { darkTheme, lightTheme, radius } from '../../lib/theme';
 
 export default function SettingsScreen() {
   const colorScheme = useColorScheme();

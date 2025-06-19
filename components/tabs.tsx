@@ -5,8 +5,8 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-import { darkTheme, lightTheme, radius } from '../theme';
-import { applyHexOpacity } from '../utils';
+import { darkTheme, lightTheme, radius } from '../lib/theme';
+import { applyHexOpacity } from '../lib/utils';
 
 type TabsProps<T extends string> = {
   tabs: T[];
