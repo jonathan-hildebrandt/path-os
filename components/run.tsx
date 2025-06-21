@@ -1,7 +1,14 @@
-import { StyleSheet, Text, useColorScheme, View } from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  useColorScheme,
+  View,
+} from 'react-native';
 import { ActivityRun } from '../lib/model';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { darkTheme, lightTheme, radius } from '../lib/theme';
+import { Link } from 'expo-router';
 
 export default function Run({ run }: { run: ActivityRun }) {
   const colorScheme = useColorScheme();
@@ -13,18 +20,27 @@ export default function Run({ run }: { run: ActivityRun }) {
     colorScheme === 'light' ? styles.lightText : styles.darkText;
 
   return (
-    <View style={[styles.container, themeContainerStyle]}>
-      <Ionicons
-        name='map-outline'
-        size={24}
-        color={colorScheme === 'light' ? '#000' : '#fff'}
-      />
+    <Link
+      key={run.id}
+      href={{
+        pathname: `/activity/${run.id}`,
+      }}
+      asChild>
+      <Pressable>
+        <View style={[styles.container, themeContainerStyle]}>
+          <Ionicons
+            name='map-outline'
+            size={24}
+            color={colorScheme === 'light' ? '#000' : '#fff'}
+          />
 
-      <Text style={[themeTextStyle]}>{run.date}</Text>
-      <Text style={[themeTextStyle]}>
-        {run.distance.distance} {run.distance.unit}
-      </Text>
-    </View>
+          <Text style={[themeTextStyle]}>{run.date}</Text>
+          <Text style={[themeTextStyle]}>
+            {run.distance.distance} {run.distance.unit}
+          </Text>
+        </View>
+      </Pressable>
+    </Link>
   );
 }
 
