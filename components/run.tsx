@@ -9,6 +9,7 @@ import { ActivityRun } from '../lib/model';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { darkTheme, lightTheme, radius } from '../lib/theme';
 import { Link } from 'expo-router';
+import { applyHexOpacity } from '../lib/utils';
 
 export default function Run({ run }: { run: ActivityRun }) {
   const colorScheme = useColorScheme();
@@ -19,6 +20,11 @@ export default function Run({ run }: { run: ActivityRun }) {
   const themeTextStyle =
     colorScheme === 'light' ? styles.lightText : styles.darkText;
 
+  const themeDescriptionStyle =
+    colorScheme === 'light'
+      ? styles.lightThemeDescription
+      : styles.darkThemeDescription;
+
   return (
     <Link
       key={run.id}
@@ -28,16 +34,44 @@ export default function Run({ run }: { run: ActivityRun }) {
       asChild>
       <Pressable>
         <View style={[styles.container, themeContainerStyle]}>
-          <Ionicons
-            name='map-outline'
-            size={24}
-            color={colorScheme === 'light' ? '#000' : '#fff'}
-          />
-
-          <Text style={[themeTextStyle]}>{run.date}</Text>
-          <Text style={[themeTextStyle]}>
-            {run.distance.distance} {run.distance.unit}
-          </Text>
+          <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
+            <Ionicons
+              name='map-outline'
+              size={20}
+              color={colorScheme === 'light' ? '#000' : '#fff'}
+            />
+            <Text style={[styles.text, themeTextStyle]}>{run.date}</Text>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              gap: 20,
+              marginTop: 10,
+              justifyContent: 'space-between',
+            }}>
+            <View style={styles.statCard}>
+              <Text style={[styles.text, themeTextStyle]}>
+                {run.distance.distance}
+              </Text>
+              <Text style={[styles.description, themeDescriptionStyle]}>
+                {run.distance.unit}
+              </Text>
+            </View>
+            <View style={styles.statCard}>
+              <Text style={[styles.text, themeTextStyle]}>{run.avgPace}</Text>
+              <Text style={[styles.description, themeDescriptionStyle]}>
+                Avg. Pace
+              </Text>
+            </View>
+            <View style={styles.statCard}>
+              <Text style={[styles.text, themeTextStyle]}>
+                {run.duration.duration}
+              </Text>
+              <Text style={[styles.description, themeDescriptionStyle]}>
+                {run.duration.unit}
+              </Text>
+            </View>
+          </View>
         </View>
       </Pressable>
     </Link>
@@ -49,6 +83,15 @@ const styles = StyleSheet.create({
     borderRadius: radius,
     borderWidth: 1,
     padding: 10,
+  },
+  statCard: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+  },
+  text: {
+    fontSize: 20,
+    fontWeight: '600',
   },
   lightContainer: {
     borderColor: lightTheme.border,
@@ -63,5 +106,15 @@ const styles = StyleSheet.create({
   },
   darkText: {
     color: darkTheme.foreground,
+  },
+  description: {
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  lightThemeDescription: {
+    color: applyHexOpacity(lightTheme.foreground, 60),
+  },
+  darkThemeDescription: {
+    color: applyHexOpacity(darkTheme.foreground, 60),
   },
 });

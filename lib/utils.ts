@@ -103,7 +103,7 @@ export function getDistanceDynamic(meters: number): string {
   if (meters >= 1000) {
     return (meters / 1000).toFixed(1).replace('.', ',');
   }
-  return meters.toFixed(2).replace('.', ',');
+  return meters.toFixed(1).replace('.', ',');
 }
 
 export function getDistanceUnit(meters: number): string {
