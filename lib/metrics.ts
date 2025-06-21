@@ -50,8 +50,6 @@ export function calculateRunMetrics(locations: UncompletedLocation[]): {
   };
 }
 
-//TODO understand why this is not working
-
 /**
  * Calculates the split metrics for each kilometer based on the provided locations.
  * @param locations - An array of UncompletedLocation objects representing the run.
