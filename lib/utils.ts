@@ -1,6 +1,7 @@
 import { LocationObject } from 'expo-location';
 import { UncompletedLocation } from './model';
 import { getDistance } from 'geolib';
+import { intervalToDuration } from 'date-fns';
 
 /**
  * Converts a hex color to a hex color with an alpha value.
@@ -64,4 +65,50 @@ export function getDistanceInMeter(
   );
 
   return distanceInMeters;
+}
+
+export function formatDurationDynamic(seconds: number): string {
+  const duration = intervalToDuration({ start: 0, end: seconds * 1000 });
+
+  const { hours = 0, minutes = 0, seconds: secs = 0 } = duration;
+
+  if (hours > 0) {
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(
+      2,
+      '0'
+    )}:${String(secs).padStart(2, '0')}`;
+  }
+  if (minutes > 0) {
+    return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(
+      2,
+      '0'
+    )}`;
+  }
+  return `${secs}`;
+}
+
+export function getDurationUnit(seconds: number): string {
+  const duration = intervalToDuration({ start: 0, end: seconds * 1000 });
+
+  if (duration.hours && duration.hours > 0) {
+    return 'Hours';
+  }
+  if (duration.minutes && duration.minutes > 0) {
+    return 'Minutes';
+  }
+  return 'Seconds';
+}
+
+export function getDistanceDynamic(meters: number): string {
+  if (meters >= 1000) {
+    return (meters / 1000).toFixed(2).replace('.', ',');
+  }
+  return meters.toFixed(2).replace('.', ',');
+}
+
+export function getDistanceUnit(meters: number): string {
+  if (meters >= 1000) {
+    return 'Kilometers';
+  }
+  return 'Meters';
 }

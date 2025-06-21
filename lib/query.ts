@@ -1,10 +1,16 @@
 import { getDb } from './db';
 import {
+  ActivityRun,
+  ActivityRunSchema,
   CompletedLocation,
   CompletedLocationSchema,
   CompletedRun,
   CompletedRunSchema,
+  CursorSchema,
+  Overview,
+  OverviewSchema,
   RunIdSchema,
+  RunSchema,
   RunStatus,
   UncompletedLocationSchema,
   UncompletedRunSchema,
@@ -74,7 +80,7 @@ export default async function initDatabase(): Promise<void> {
 
     console.log('✅ Database initialized successfully.');
 
-    completeInProgressRuns();
+    await completeInProgressRuns();
   } catch (error) {
     console.error('❌ Error initializing database:', error);
     throw error;
@@ -319,6 +325,140 @@ export async function insertLocation(
     return result.lastInsertRowId;
   } catch (error) {
     console.error('❌ insertLocation failed:', error);
+    throw error;
+  }
+}
+
+/**
+ * Retrieves an overview of runs for a specified time interval.
+ * @param interval - The time interval for which to retrieve the overview data.
+ * @returns Promise<Overview> An object containing the overview data for the specified interval.
+ */
+export async function getOverview(
+  interval: 'week' | 'month' | 'year' | 'all'
+): Promise<Overview> {
+  const db = await getDb();
+
+  try {
+    const modifier = interval === 'week' ? '-7 days' : `-1 ${interval}`;
+
+    const row = await db.getFirstAsync(`
+      SELECT
+        COUNT(*) AS totalRuns,
+        SUM(distanceInMeters) AS totalDistance,
+        AVG(avgPaceInSeconds) AS avgPace,
+        SUM(durationInSeconds) AS totalDuration
+      FROM run
+      WHERE status != 'in_progress'
+      ${
+        interval !== 'all'
+          ? `AND timestamp >= (strftime('%s', 'now', '${modifier}') * 1000)`
+          : ''
+      }
+    `);
+
+    const parsed = OverviewSchema.parse(row);
+
+    return {
+      totalRuns: parsed.totalRuns ?? '0',
+      totalDistance: parsed.totalDistance ?? { distance: '0', unit: 'm' },
+      avgPace: parsed.avgPace ?? '0',
+      totalDuration: parsed.totalDuration ?? {
+        duration: '00:00',
+        unit: 'seconds',
+      },
+    };
+  } catch (error) {
+    console.error('❌ getOverview failed:', error);
+    throw error;
+  }
+}
+
+/**
+ * Retrieves runs from the database with pagination support.
+ * @param rawCursor - The cursor for pagination, representing the offset from which to start retrieving runs.
+ * @returns Promise<{ runs: ActivityRun[], cursor: number | null }>
+ */
+export async function getRuns(rawCursor: number): Promise<{
+  runs: ActivityRun[];
+  cursor: number | null;
+}> {
+  const LIMIT = 2;
+
+  const cursor = CursorSchema.parse({ cursor: rawCursor }).cursor;
+
+  const db = await getDb();
+
+  try {
+    const runs = await db.getAllAsync(
+      `SELECT id, status, durationInSeconds as duration, distanceInMeters as distance, avgPaceInSeconds as avgPace, timestamp as date FROM run ORDER BY timestamp DESC LIMIT ${
+        LIMIT + 1
+      } OFFSET ?;`,
+      [cursor]
+    );
+
+    const parsed = ActivityRunSchema.array().parse(runs);
+
+    if (parsed.length > LIMIT) {
+      parsed.pop();
+      return {
+        runs: parsed,
+        cursor: cursor + LIMIT,
+      };
+    } else {
+      return {
+        runs: parsed,
+        cursor: null,
+      };
+    }
+  } catch (error) {
+    console.error('❌ getRuns failed:', error);
+    throw error;
+  }
+}
+
+export async function getRunById(runId: number) {
+  const db = await getDb();
+
+  try {
+    const run = await db.getFirstAsync(
+      `SELECT
+         id,
+         status,
+         durationInSeconds AS duration,
+         distanceInMeters AS distance,
+         avgPaceInSeconds AS avgPace,
+         elevationGainInMeters AS elevationGain,
+         timestamp AS date
+        FROM run
+        WHERE id = ?;`,
+      [runId]
+    );
+
+    if (!run) {
+      throw new Error(`Run with ID ${runId} not found.`);
+    }
+
+    const splits = await db.getAllAsync(
+      `SELECT
+          id,
+          km,
+          avgPaceInSeconds AS splitPace,
+          elevationGainInMeters AS splitElevation
+        FROM split
+        WHERE runId = ?
+        ORDER BY km ASC;`,
+      [runId]
+    );
+
+    const parsed = RunSchema.parse({
+      ...run,
+      splits,
+    });
+
+    console.log(`✅ Retrieved run with ID: ${JSON.stringify(parsed)}`);
+  } catch (error) {
+    console.error(`❌ getRunById failed for run ${runId}:`, error);
     throw error;
   }
 }
