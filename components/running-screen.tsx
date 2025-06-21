@@ -10,7 +10,7 @@ import {
   getPace,
   getTotalDistanceInKilometersString,
 } from '../lib/location';
-import { msToMinutesAndSeconds } from '../lib/utils';
+import { applyHexOpacity, msToMinutesAndSeconds } from '../lib/utils';
 
 //TODO fix positioning
 
@@ -122,47 +122,87 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
   const themeTextStyle =
     colorScheme === 'light' ? styles.lightThemeText : styles.darkThemeText;
 
+  const themeContainerStyle =
+    colorScheme === 'light'
+      ? styles.lightThemeContainer
+      : styles.darkThemeContainer;
+
+  const themeDescriptionStyle =
+    colorScheme === 'light'
+      ? styles.lightThemeDescription
+      : styles.darkThemeDescription;
+
+  const themeKmTextStyle =
+    colorScheme === 'light' ? styles.lightThemeKmText : styles.darkThemeKmText;
+
+  const themeKmDescriptionStyle =
+    colorScheme === 'light'
+      ? styles.lightThemeKmDescription
+      : styles.darkThemeKmDescription;
+
   return (
-    <View style={[styles.container]}>
+    <View style={[styles.container, themeContainerStyle]}>
       <View
         style={{
-          flex: 1,
-          gap: 40,
+          height: '60%',
+          width: '100%',
           justifyContent: 'center',
           alignItems: 'center',
         }}>
         <View
           style={{
+            flex: 1,
             flexDirection: 'row',
             justifyContent: 'space-around',
+            alignItems: 'center',
             width: '100%',
-            paddingHorizontal: 20,
           }}>
-          <Text style={[styles.text, themeTextStyle]}>
-            Time: {msToMinutesAndSeconds(timer)}
+          <View style={styles.statCard}>
+            <Text style={[styles.text, themeTextStyle]}>
+              {msToMinutesAndSeconds(timer)}
+            </Text>
+            <Text style={[styles.description, themeDescriptionStyle]}>
+              Time
+            </Text>
+          </View>
+          <View style={styles.statCard}>
+            <Text style={[styles.text, themeTextStyle]}>
+              {getAvgPace(locations)}
+            </Text>
+            <Text style={[styles.description, themeDescriptionStyle]}>
+              Avg. Pace
+            </Text>
+          </View>
+          <View style={styles.statCard}>
+            <Text style={[styles.text, themeTextStyle]}>
+              {getPace(locations)}
+            </Text>
+            <Text style={[styles.description, themeDescriptionStyle]}>
+              Pace
+            </Text>
+          </View>
+        </View>
+        <View style={styles.statCard}>
+          <Text style={[styles.kmText, themeKmTextStyle]}>
+            {getTotalDistanceInKilometersString(locations)}
           </Text>
-          <Text style={[styles.text, themeTextStyle]}>
-            Avg. Pace: {getAvgPace(locations)}
-          </Text>
-          <Text style={[styles.text, themeTextStyle]}>
-            Pace: {getPace(locations)}
+          <Text style={[styles.kmDescription, themeKmDescriptionStyle]}>
+            Kilometers
           </Text>
         </View>
-
-        <Text style={[styles.text, themeTextStyle]}>
-          Kilometers: {getTotalDistanceInKilometersString(locations)}
-        </Text>
       </View>
       <View
         style={{
           flex: 1,
           flexDirection: 'row',
           gap: 20,
+          width: '100%',
+          height: '40%',
           justifyContent: 'center',
           alignItems: 'center',
         }}>
         <Button
-          variant='default'
+          variant='secondary'
           text={isPaused ? 'Resume' : 'Pause'}
           style={{ width: 100, height: 40 }}
           textStyle={{ fontSize: 18, lineHeight: 22, fontWeight: 'bold' }}
@@ -176,7 +216,7 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
         />
         {isPaused && (
           <Button
-            variant='dark'
+            variant='destructive'
             text='Stop'
             style={{ width: 100, height: 40 }}
             textStyle={{ fontSize: 18, lineHeight: 22, fontWeight: 'bold' }}
@@ -196,22 +236,60 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  lightThemeContainer: {
     backgroundColor: lightTheme.primary,
+  },
+  darkThemeContainer: {
+    backgroundColor: darkTheme.primary,
+  },
+  statCard: {
+    display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
   },
   text: {
-    fontSize: 20,
-    padding: 10,
-    borderWidth: 1,
-    borderRadius: radius,
+    fontSize: 28,
+    fontWeight: 'bold',
   },
   lightThemeText: {
-    color: lightTheme.foreground,
-    borderColor: lightTheme.border,
+    color: lightTheme.background,
   },
   darkThemeText: {
     color: darkTheme.foreground,
-    borderColor: darkTheme.border,
+  },
+  description: {
+    fontSize: 20,
+    fontWeight: '600',
+  },
+  lightThemeDescription: {
+    color: applyHexOpacity(lightTheme.background, 60),
+  },
+  darkThemeDescription: {
+    color: applyHexOpacity(darkTheme.foreground, 60),
+  },
+  kmText: {
+    fontSize: 70,
+    marginTop: 50,
+    fontWeight: 'bold',
+  },
+  lightThemeKmText: {
+    color: lightTheme.foreground,
+  },
+  darkThemeKmText: {
+    color: darkTheme.background,
+  },
+  kmDescription: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginTop: 4,
+  },
+  lightThemeKmDescription: {
+    color: applyHexOpacity(lightTheme.foreground, 60),
+  },
+  darkThemeKmDescription: {
+    color: applyHexOpacity(darkTheme.background, 60),
   },
 });

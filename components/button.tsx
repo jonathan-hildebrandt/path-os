@@ -190,7 +190,7 @@ const variantDarkStyles = StyleSheet.create({
     backgroundColor: darkTheme.background,
   },
   destructive: {
-    backgroundColor: applyHexOpacity(darkTheme.destructive, 50),
+    backgroundColor: applyHexOpacity(darkTheme.destructive, 80),
   },
   outline: {
     borderWidth: 1,
@@ -212,7 +212,7 @@ const pressedVariantDarkStyles = StyleSheet.create({
     backgroundColor: applyHexOpacity(darkTheme.background, 90),
   },
   destructive: {
-    backgroundColor: applyHexOpacity(darkTheme.destructive, 40),
+    backgroundColor: applyHexOpacity(darkTheme.destructive, 70),
   },
   outline: {
     backgroundColor: darkTheme.accent,
