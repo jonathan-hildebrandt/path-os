@@ -12,8 +12,6 @@ import {
 } from '../lib/location';
 import { applyHexOpacity, msToMinutesAndSeconds } from '../lib/utils';
 
-//TODO fix positioning
-
 interface RunningScreenProps {
   setIsRunning: Dispatch<SetStateAction<boolean>>;
 }
