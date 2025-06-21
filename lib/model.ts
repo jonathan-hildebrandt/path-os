@@ -13,6 +13,8 @@ export enum RunStatus {
   ABORTED = 'aborted',
 }
 
+export type Interval = 'year' | 'week' | 'month' | 'all';
+
 export const CompletedRunSchema = z.object({
   id: z.number().nonnegative(),
   status: z.enum(RunStatus),

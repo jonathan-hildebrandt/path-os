@@ -47,7 +47,6 @@ export default function TabLayout() {
         name='activity'
         options={{
           title: 'Activity',
-          headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
               name={focused ? 'list' : 'list'}
@@ -61,7 +60,6 @@ export default function TabLayout() {
         name='settings'
         options={{
           title: 'Settings',
-          headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
               name={focused ? 'settings-outline' : 'settings-outline'}

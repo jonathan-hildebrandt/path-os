@@ -18,7 +18,7 @@ export default function HomeScreen() {
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
 
-  const [mode, setMode] = useState<'Distance' | 'Time'>('Distance');
+  const [mode, setMode] = useState<'distance' | 'time'>('distance');
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [distance, setDistance] = useState<string>('');
   const [time, setTime] = useState<string>('');

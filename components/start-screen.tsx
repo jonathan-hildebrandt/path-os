@@ -4,11 +4,10 @@ import Button from './button';
 import Tabs from './tabs';
 import { Dispatch, SetStateAction } from 'react';
 import { darkTheme, lightTheme } from '../lib/theme';
-import { getOverview, getRunById, getRuns } from '../lib/query';
 
 type StartScreenProps = {
-  mode: 'Distance' | 'Time';
-  setMode: Dispatch<SetStateAction<'Distance' | 'Time'>>;
+  mode: 'distance' | 'time';
+  setMode: Dispatch<SetStateAction<'distance' | 'time'>>;
   distance: string;
   setDistance: Dispatch<SetStateAction<string>>;
   time: string;
@@ -40,21 +39,21 @@ export default function StartScreen({
           alignItems: 'center',
         }}>
         <Text style={[styles.text, themeTextStyle]}>Your Goal</Text>
-        <Tabs<'Distance' | 'Time'>
+        <Tabs<'distance' | 'time'>
           selectedTab={mode}
           setSelectedTab={setMode}
-          tabs={['Distance', 'Time']}
+          tabs={['distance', 'time']}
         />
         <Input
-          value={mode === 'Distance' ? distance : time}
-          setValue={mode === 'Distance' ? setDistance : setTime}
+          value={mode === 'distance' ? distance : time}
+          setValue={mode === 'distance' ? setDistance : setTime}
           textAlign='center'
           style={{
             width: 200,
           }}
           maxLength={3}
           placeholder={
-            mode === 'Distance' ? 'Enter distance (km)' : 'Enter time (min)'
+            mode === 'distance' ? 'Enter distance (km)' : 'Enter time (min)'
           }
           type='number'
         />

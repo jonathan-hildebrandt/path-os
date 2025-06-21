@@ -6,7 +6,7 @@ import {
   View,
 } from 'react-native';
 import { darkTheme, lightTheme, radius } from '../lib/theme';
-import { applyHexOpacity } from '../lib/utils';
+import { applyHexOpacity, capitalizeFirstLetter } from '../lib/utils';
 
 type TabsProps<T extends string> = {
   tabs: T[];
@@ -57,7 +57,7 @@ export default function Tabs<T extends string>({
             key={index}
             onPress={() => !disabled && setSelectedTab(tab)}
             style={themeTriggerStyle}>
-            <Text style={themeTextStyle}>{tab}</Text>
+            <Text style={themeTextStyle}>{capitalizeFirstLetter(tab)}</Text>
           </Pressable>
         );
       })}

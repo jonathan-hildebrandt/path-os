@@ -112,3 +112,7 @@ export function getDistanceUnit(meters: number): string {
   }
   return 'Meters';
 }
+
+export function capitalizeFirstLetter(string: string): string {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
