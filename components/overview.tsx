@@ -14,30 +14,18 @@ export default function OverviewScreen({ interval }: OverviewProps) {
 
   const [overview, setOverview] = useState<Overview | null>(null);
 
-  const [loading, setLoading] = useState<boolean>(true);
-
   useEffect(() => {
     async function queryOverview() {
       try {
-        setLoading(true);
-
         const fetchedOverview = await getOverview(interval);
         setOverview(fetchedOverview);
       } catch (error) {
         console.error('Failed to fetch overview:', error);
-      } finally {
-        setLoading(false);
       }
     }
 
     queryOverview();
   }, [interval]);
-
-  useEffect(() => {
-    if (overview) {
-      console.log('Fetched overview:', overview);
-    }
-  }, [overview]);
 
   const themeTextStyle =
     colorScheme === 'light' ? styles.lightThemeText : styles.darkThemeText;
@@ -45,33 +33,29 @@ export default function OverviewScreen({ interval }: OverviewProps) {
     colorScheme === 'light'
       ? styles.lightThemeDescription
       : styles.darkThemeDescription;
+  const themeContainerStyle =
+    colorScheme === 'light' ? styles.lightContainer : styles.darkContainer;
 
   return (
-    <View
-      style={{
-        borderColor: lightTheme.border,
-        borderWidth: 1,
-        borderRadius: radius,
-        padding: 10,
-        width: '90%',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
-      {loading ? (
-        <Text>Loading...</Text>
-      ) : overview ? (
-        <View>
-          <View>
+    <View style={[styles.container, themeContainerStyle]}>
+      {overview ? (
+        <View style={{ width: '100%', gap: 12, backgroundColor: '#FF000' }}>
+          <View style={{ width: '100%', backgroundColor: '#FF000' }}>
             <View style={styles.statCard}>
-              <Text style={[styles.text, themeTextStyle]}>
+              <Text style={[styles.km, themeTextStyle]}>
                 {overview.totalDistance?.distance}
               </Text>
-              <Text style={[styles.description, themeDescriptionStyle]}>
+              <Text style={[styles.kmDescription, themeDescriptionStyle]}>
                 {overview.totalDistance?.unit}
               </Text>
             </View>
           </View>
-          <View style={{ flexDirection: 'row', gap: 20 }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              gap: 20,
+              justifyContent: 'space-between',
+            }}>
             <View style={styles.statCard}>
               <Text style={[styles.text, themeTextStyle]}>
                 {overview.totalRuns}
@@ -85,7 +69,7 @@ export default function OverviewScreen({ interval }: OverviewProps) {
                 {overview.avgPace}
               </Text>
               <Text style={[styles.description, themeDescriptionStyle]}>
-                min/km
+                Avg. Pace
               </Text>
             </View>
             <View style={styles.statCard}>
@@ -106,14 +90,36 @@ export default function OverviewScreen({ interval }: OverviewProps) {
 }
 
 const styles = StyleSheet.create({
-  statCard: {
-    display: 'flex',
+  container: {
+    borderWidth: 1,
+    borderRadius: radius,
+    padding: 20,
+    width: '90%',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  text: {
-    fontSize: 28,
+  lightContainer: {
+    borderColor: lightTheme.border,
+  },
+  darkContainer: {
+    borderColor: darkTheme.border,
+  },
+  statCard: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+  },
+  km: {
+    fontSize: 40,
     fontWeight: 'bold',
+  },
+  kmDescription: {
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  text: {
+    fontSize: 24,
+    fontWeight: '600',
   },
   lightThemeText: {
     color: lightTheme.foreground,
@@ -122,8 +128,8 @@ const styles = StyleSheet.create({
     color: darkTheme.foreground,
   },
   description: {
-    fontSize: 20,
-    fontWeight: '600',
+    fontSize: 12,
+    fontWeight: '500',
   },
   lightThemeDescription: {
     color: applyHexOpacity(lightTheme.foreground, 60),

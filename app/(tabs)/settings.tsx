@@ -27,8 +27,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     padding: 10,
-    borderWidth: 1,
-    borderRadius: radius,
   },
   lightContainer: {
     backgroundColor: lightTheme.background,

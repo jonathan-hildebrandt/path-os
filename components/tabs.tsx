@@ -4,6 +4,7 @@ import {
   Text,
   useColorScheme,
   View,
+  ViewStyle,
 } from 'react-native';
 import { darkTheme, lightTheme, radius } from '../lib/theme';
 import { applyHexOpacity, capitalizeFirstLetter } from '../lib/utils';
@@ -13,6 +14,8 @@ type TabsProps<T extends string> = {
   selectedTab: T;
   setSelectedTab: (tab: T) => void;
   disabled?: boolean;
+  style?: ViewStyle;
+  tabStyle?: ViewStyle;
 };
 
 export default function Tabs<T extends string>({
@@ -20,6 +23,8 @@ export default function Tabs<T extends string>({
   selectedTab,
   setSelectedTab,
   disabled,
+  style,
+  tabStyle,
 }: TabsProps<T>) {
   const colorScheme = useColorScheme();
 
@@ -29,7 +34,7 @@ export default function Tabs<T extends string>({
   ]);
 
   return (
-    <View style={themeContainerStyle}>
+    <View style={[themeContainerStyle, style]}>
       {tabs?.map((tab, index) => {
         const isActive = tab === selectedTab;
         const themeTriggerStyle = StyleSheet.flatten([
@@ -56,7 +61,7 @@ export default function Tabs<T extends string>({
           <Pressable
             key={index}
             onPress={() => !disabled && setSelectedTab(tab)}
-            style={themeTriggerStyle}>
+            style={[themeTriggerStyle, tabStyle]}>
             <Text style={themeTextStyle}>{capitalizeFirstLetter(tab)}</Text>
           </Pressable>
         );

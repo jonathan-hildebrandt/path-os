@@ -121,7 +121,5 @@ export function calculateSplitMetrics(
     });
   }
 
-  console.log(`✅ Calculated ${splits.length} splits for run ${runId}.`);
-
   return splits;
 }

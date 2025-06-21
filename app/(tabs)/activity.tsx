@@ -23,6 +23,14 @@ export default function ActivityScreen() {
         selectedTab={interval}
         setSelectedTab={setInterval}
         tabs={['week', 'month', 'year', 'all']}
+        tabStyle={{
+          width: '25%',
+        }}
+        style={{
+          width: '90%',
+          paddingHorizontal: 20,
+          justifyContent: 'space-around',
+        }}
       />
       <Overview interval={interval} />
       <RunsView />
