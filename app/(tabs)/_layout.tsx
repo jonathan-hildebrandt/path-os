@@ -2,9 +2,12 @@ import { Tabs } from 'expo-router';
 import { useColorScheme } from 'react-native';
 import { darkTheme, lightTheme } from '../../lib/theme';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useRunStore } from '../../lib/store';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+
+  const isRunning = useRunStore((state) => state.isRunning);
 
   return (
     <Tabs
@@ -32,8 +35,9 @@ export default function TabLayout() {
       <Tabs.Screen
         name='index'
         options={{
-          headerShown: false,
+          headerShown: true,
           title: 'Run',
+          // tabBarButton: isRunning ? undefined : () => null,
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
               name={focused ? 'fitness' : 'fitness'}
@@ -47,6 +51,7 @@ export default function TabLayout() {
         name='activity'
         options={{
           title: 'Activity',
+          // tabBarButton: isRunning ? undefined : () => null,
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
               name={focused ? 'list' : 'list'}

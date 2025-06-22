@@ -10,12 +10,16 @@ export type RunStore = {
   interval: Interval;
   setInterval: (overview: Interval) => void;
   overview: Overview | null;
+  isRunning: boolean;
+  setIsRunning: (isRunning: boolean) => void;
   setOverview: (overview: Overview | null) => void;
 };
 
 export const useRunStore = create<RunStore>()((set) => ({
   cursor: 0,
   interval: 'week',
+  isRunning: false,
+  setIsRunning: (isRunning: boolean) => set(() => ({ isRunning })),
   setInterval: (interval: Interval) => set(() => ({ interval })),
   overview: null,
   setOverview: (overview: Overview | null) => set(() => ({ overview })),

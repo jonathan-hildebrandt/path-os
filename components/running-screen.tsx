@@ -20,7 +20,7 @@ import { applyHexOpacity, msToMinutesAndSeconds } from '../lib/utils';
 import { useRunStore } from '../lib/store';
 
 interface RunningScreenProps {
-  setIsRunning: Dispatch<SetStateAction<boolean>>;
+  setIsRunning: (isRunning: boolean) => void;
 }
 
 export default function RunningScreen({ setIsRunning }: RunningScreenProps) {

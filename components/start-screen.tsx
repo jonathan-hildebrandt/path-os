@@ -1,62 +1,42 @@
 import { StyleSheet, Text, useColorScheme, View } from 'react-native';
-import Input from './input';
 import Button from './button';
-import Tabs from './tabs';
 import { Dispatch, SetStateAction } from 'react';
 import { darkTheme, lightTheme } from '../lib/theme';
+import { applyHexOpacity } from '../lib/utils';
 
 type StartScreenProps = {
-  mode: 'distance' | 'time';
-  setMode: Dispatch<SetStateAction<'distance' | 'time'>>;
-  distance: string;
-  setDistance: Dispatch<SetStateAction<string>>;
-  time: string;
-  setTime: Dispatch<SetStateAction<string>>;
-  setIsRunning: Dispatch<SetStateAction<boolean>>;
+  setIsRunning: (isRunning: boolean) => void;
 };
 
-export default function StartScreen({
-  mode,
-  setMode,
-  setDistance,
-  setTime,
-  distance,
-  time,
-  setIsRunning,
-}: StartScreenProps) {
+export default function StartScreen({ setIsRunning }: StartScreenProps) {
   const colorScheme = useColorScheme();
 
   const themeTextStyle =
     colorScheme === 'light' ? styles.lightText : styles.darkText;
+
+  const themeDescriptionStyle =
+    colorScheme === 'light'
+      ? styles.lightDescriptionText
+      : styles.darkDescriptionText;
 
   return (
     <View style={{ flex: 1 }}>
       <View
         style={{
           flex: 1,
-          gap: 40,
+          gap: 10,
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <Text style={[styles.text, themeTextStyle]}>Your Goal</Text>
-        <Tabs<'distance' | 'time'>
-          selectedTab={mode}
-          setSelectedTab={setMode}
-          tabs={['distance', 'time']}
-        />
-        <Input
-          value={mode === 'distance' ? distance : time}
-          setValue={mode === 'distance' ? setDistance : setTime}
-          textAlign='center'
-          style={{
-            width: 200,
-          }}
-          maxLength={3}
-          placeholder={
-            mode === 'distance' ? 'Enter distance (km)' : 'Enter time (min)'
-          }
-          type='number'
-        />
+        <Text style={[styles.text, themeTextStyle]}>PathOs</Text>
+        <Text
+          style={[
+            themeTextStyle,
+            styles.descriptionText,
+            themeDescriptionStyle,
+          ]}>
+          Start a new run
+        </Text>
       </View>
       <View
         style={{
@@ -98,5 +78,15 @@ const styles = StyleSheet.create({
   },
   darkText: {
     color: darkTheme.foreground,
+  },
+  descriptionText: {
+    fontSize: 20,
+    fontWeight: 'normal',
+  },
+  lightDescriptionText: {
+    color: applyHexOpacity(lightTheme.foreground, 80),
+  },
+  darkDescriptionText: {
+    color: applyHexOpacity(darkTheme.foreground, 80),
   },
 });

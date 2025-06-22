@@ -6,25 +6,17 @@ import {
   View,
 } from 'react-native';
 import { darkTheme, lightTheme, radius } from '../../lib/theme';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import StartScreen from '../../components/start-screen';
 import RunningScreen from '../../components/running-screen';
-import { useNavigation } from 'expo-router';
+import { useRunStore } from '../../lib/store';
 
 export default function HomeScreen() {
   const colorScheme = useColorScheme();
-  const navigation = useNavigation();
 
-  const [mode, setMode] = useState<'distance' | 'time'>('distance');
-  const [isRunning, setIsRunning] = useState<boolean>(false);
-  const [distance, setDistance] = useState<string>('');
-  const [time, setTime] = useState<string>('');
-
-  // Dynamically hide tab bar
-  useEffect(() => {
-    navigation.setOptions({});
-  }, [isRunning]);
+  const isRunning = useRunStore((state) => state.isRunning);
+  const setIsRunning = useRunStore((state) => state.setIsRunning);
 
   const themeSafeAreaViewStyle =
     colorScheme === 'light'
@@ -49,15 +41,7 @@ export default function HomeScreen() {
           themeSafeAreaViewStyle,
           isRunning ? themePrimaryBackgroundStyle : themeNormalBackgroundStyle,
         ]}>
-        <StartScreen
-          mode={mode}
-          setMode={setMode}
-          distance={distance}
-          setDistance={setDistance}
-          time={time}
-          setTime={setTime}
-          setIsRunning={setIsRunning}
-        />
+        <StartScreen setIsRunning={setIsRunning} />
         {isRunning && (
           <View style={StyleSheet.absoluteFill}>
             <RunningScreen setIsRunning={setIsRunning} />
