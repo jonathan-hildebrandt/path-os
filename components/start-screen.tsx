@@ -29,7 +29,7 @@ export default function StartScreen({ setIsRunning }: StartScreenProps) {
   return (
     <View style={styles.flexOne}>
       <View style={styles.container}>
-        <Text style={[styles.text, themeTextStyle]}>PathOs</Text>
+        <Text style={[styles.text, themeTextStyle]}>PathOS</Text>
         <Text
           style={[
             themeTextStyle,
