@@ -5,6 +5,7 @@
 - understanding screens, stack, tabs (navigation)
 - race conditions in tabs
 - displaying pending
+- disable navigation when running
 
 ### ToDo's
 
