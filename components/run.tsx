@@ -52,7 +52,11 @@ export default function Run({ run }: { run: ActivityRun }) {
             <Ionicons
               name='map-outline'
               size={20}
-              color={colorScheme === 'light' ? '#000' : '#fff'}
+              color={
+                colorScheme === 'light'
+                  ? lightTheme.foreground
+                  : darkTheme.foreground
+              }
             />
             <Text style={[styles.text, themeTextStyle]}>{run.date}</Text>
           </View>

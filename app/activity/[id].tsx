@@ -58,7 +58,7 @@ export default function RunActivityScreen() {
     <SafeAreaView style={[styles.safeAreaView, themeSafeAreaViewStyle]}>
       {!isLoading ? (
         <View style={styles.container}>
-          <Heading />
+          <Heading run={run} />
           <SingleOverviewScreen run={run} />
           <Splits run={run} />
         </View>
