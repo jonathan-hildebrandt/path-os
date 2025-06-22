@@ -12,8 +12,6 @@ import StartScreen from '../../components/start-screen';
 import RunningScreen from '../../components/running-screen';
 import { useNavigation } from 'expo-router';
 
-//TODO what does the goal do? maybe remove it?
-
 export default function HomeScreen() {
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
