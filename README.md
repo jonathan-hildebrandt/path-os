@@ -10,8 +10,6 @@
 ### ToDo's
 
 - scrolling lagging?
-- test on android
-- test on ipad / android tablet
 - goal? notification?
 - background tracking?
 - assets?
