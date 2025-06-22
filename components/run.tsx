@@ -45,7 +45,7 @@ export default function Run({ run }: { run: ActivityRun }) {
         onPressIn={() => setPressed(true)}
         onPressOut={() => setPressed(false)}>
         <View style={[styles.container, themePressedContainerStyle]}>
-          <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
+          <View style={styles.headingContainer}>
             <Ionicons
               name='map-outline'
               size={20}
@@ -57,13 +57,7 @@ export default function Run({ run }: { run: ActivityRun }) {
             />
             <Text style={[styles.text, themeTextStyle]}>{run.date}</Text>
           </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              gap: 20,
-              marginTop: 10,
-              justifyContent: 'space-between',
-            }}>
+          <View style={styles.bodyContainer}>
             <View style={styles.statCard}>
               <Text style={[styles.text, themeTextStyle]}>
                 {run.distance.distance}
@@ -98,6 +92,17 @@ const styles = StyleSheet.create({
     borderRadius: radius,
     borderWidth: 1,
     padding: 10,
+  },
+  headingContainer: {
+    flexDirection: 'row',
+    gap: 10,
+    alignItems: 'center',
+  },
+  bodyContainer: {
+    flexDirection: 'row',
+    gap: 20,
+    marginTop: 10,
+    justifyContent: 'space-between',
   },
   statCard: {
     display: 'flex',

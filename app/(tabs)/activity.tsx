@@ -21,14 +21,8 @@ export default function ActivityScreen() {
         selectedTab={interval}
         setSelectedTab={setInterval}
         tabs={['week', 'month', 'year', 'all']}
-        tabStyle={{
-          width: '25%',
-        }}
-        style={{
-          width: '90%',
-          paddingHorizontal: 20,
-          justifyContent: 'space-around',
-        }}
+        tabStyle={styles.tab}
+        style={styles.tabs}
       />
       <Overview interval={interval} />
       <RunsView />
@@ -44,6 +38,14 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  tab: {
+    width: '25%',
+  },
+  tabs: {
+    width: '90%',
+    paddingHorizontal: 20,
+    justifyContent: 'space-around',
   },
   lightContainer: {
     backgroundColor: lightTheme.background,

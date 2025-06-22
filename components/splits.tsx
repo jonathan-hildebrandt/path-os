@@ -12,48 +12,48 @@ export default function Splits({ run }: SplitsProps) {
   const themeTextStyle =
     colorScheme === 'light' ? styles.lightText : styles.darkText;
 
+  const themeTableRowStyle =
+    colorScheme === 'light'
+      ? styles.lightTableRowContainer
+      : styles.darkTableRowContainer;
+
   const TableRow = ({
     km,
     pace,
     elevation,
     isHeader = false,
     isLast = false,
-  }: any) => (
-    <View
-      style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingVertical: 8,
-        borderBottomWidth: isLast || isHeader ? 0 : 1,
-        borderColor:
-          colorScheme === 'light' ? lightTheme.border : darkTheme.border,
-      }}>
-      <Text
+  }: {
+    km: number | string;
+    pace: string;
+    elevation: string | number;
+    isHeader?: boolean;
+    isLast?: boolean;
+  }) => {
+    const isHeaderStyle = isHeader ? styles.headingText : styles.normalText;
+
+    return (
+      <View
         style={[
-          { fontSize: 16, fontWeight: isHeader ? 'bold' : 'normal', flex: 1 },
-          themeTextStyle,
+          styles.tableRowContainer,
+          themeTableRowStyle,
+          (isLast || isHeader) && styles.isLastOrHeader,
         ]}>
-        {km}
-      </Text>
-      <Text
-        style={[
-          { fontSize: 16, fontWeight: isHeader ? 'bold' : 'normal', flex: 1 },
-          themeTextStyle,
-        ]}>
-        {pace}
-      </Text>
-      <Text
-        style={[
-          { fontSize: 16, fontWeight: isHeader ? 'bold' : 'normal', flex: 1 },
-          themeTextStyle,
-        ]}>
-        {elevation}
-      </Text>
-    </View>
-  );
+        <Text style={[styles.rowText, isHeaderStyle, themeTextStyle]}>
+          {km}
+        </Text>
+        <Text style={[styles.rowText, isHeaderStyle, themeTextStyle]}>
+          {pace}
+        </Text>
+        <Text style={[styles.rowText, isHeaderStyle, themeTextStyle]}>
+          {elevation}
+        </Text>
+      </View>
+    );
+  };
 
   return (
-    <View style={{ width: '100%' }}>
+    <View style={styles.widthFull}>
       <Text style={[styles.heading, themeTextStyle]}>Splits</Text>
       <TableRow
         km='Km'
@@ -83,6 +83,34 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 16,
+  },
+  widthFull: {
+    width: '100%',
+  },
+  tableRowContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+  },
+  rowText: {
+    fontSize: 16,
+    flex: 1,
+  },
+  headingText: {
+    fontWeight: 'bold',
+  },
+  normalText: {
+    fontWeight: 'normal',
+  },
+  lightTableRowContainer: {
+    borderColor: lightTheme.border,
+  },
+  darkTableRowContainer: {
+    borderColor: darkTheme.border,
+  },
+  isLastOrHeader: {
+    borderBottomWidth: 0,
   },
   lightText: {
     color: lightTheme.foreground,
