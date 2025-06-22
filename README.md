@@ -10,6 +10,7 @@
 ### ToDo's
 
 - scrolling lagging?
+- test build locally
 - assets?
 - goal? notification? (optional)
 - background tracking? (optional)
