@@ -4,13 +4,20 @@ import { Text, View, StyleSheet, useColorScheme } from 'react-native';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import Button from './button';
 import { darkTheme, lightTheme, radius } from '../lib/theme';
-import { completeRun, createRun, insertLocation } from '../lib/query';
+import {
+  completeRun,
+  createRun,
+  getOverview,
+  getRuns,
+  insertLocation,
+} from '../lib/query';
 import {
   getAvgPace,
   getPace,
   getTotalDistanceInKilometersString,
 } from '../lib/location';
 import { applyHexOpacity, msToMinutesAndSeconds } from '../lib/utils';
+import { useRunStore } from '../lib/store';
 
 interface RunningScreenProps {
   setIsRunning: Dispatch<SetStateAction<boolean>>;
@@ -22,6 +29,10 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
   const [locations, setLocations] = useState<Location.LocationObject[]>([]);
 
   const [runId, setRunId] = useState<number | null>(null);
+
+  const addNewestRun = useRunStore((state) => state.addNewestRun);
+  const interval = useRunStore((state) => state.interval);
+  const setOverview = useRunStore((state) => state.setOverview);
 
   const [timer, setTimer] = useState(0);
 
@@ -91,12 +102,25 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
     subscriptionRef.current = subscription;
   }
 
-  function stopTracking() {
+  async function stopTracking() {
     subscriptionRef.current?.remove();
     subscriptionRef.current = null;
 
     if (runId !== null) {
-      completeRun(runId);
+      await completeRun(runId);
+
+      const resRun = await getRuns(0);
+      const resOverview = await getOverview(interval);
+
+      if (resRun.runs.length > 0) {
+        const newestRun = resRun.runs[0];
+
+        addNewestRun(newestRun);
+      }
+
+      if (resOverview) {
+        setOverview(resOverview);
+      }
     }
 
     setLocations([]);

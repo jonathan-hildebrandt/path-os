@@ -2,18 +2,16 @@ import { StatusBar } from 'expo-status-bar';
 import { View, StyleSheet, useColorScheme } from 'react-native';
 import { darkTheme, lightTheme, radius } from '../../lib/theme';
 import Overview from '../../components/overview';
-import { useState } from 'react';
-import { Interval } from '../../lib/model';
 import Tabs from '../../components/tabs';
 import RunsView from '../../components/runs';
+import { useRunStore } from '../../lib/store';
 
 export default function ActivityScreen() {
   const colorScheme = useColorScheme();
 
-  const [interval, setInterval] = useState<Interval>('week');
+  const interval = useRunStore((state) => state.interval);
+  const setInterval = useRunStore((state) => state.setInterval);
 
-  const themeTextStyle =
-    colorScheme === 'light' ? styles.lightThemeText : styles.darkThemeText;
   const themeContainerStyle =
     colorScheme === 'light' ? styles.lightContainer : styles.darkContainer;
 

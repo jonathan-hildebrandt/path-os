@@ -31,7 +31,7 @@ export default async function initDatabase(): Promise<void> {
     console.log('🔄 Initializing database...');
 
     // Uncomment the line below to reset the database
-    // resetDatabase();
+    // await resetDatabase();
 
     // Enable foreign key constraints
     await db.execAsync(`PRAGMA foreign_keys = ON;`);

@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { StyleSheet, Text, useColorScheme, View } from 'react-native';
-import { Interval, Overview } from '../lib/model';
+import { Interval } from '../lib/model';
 import { getOverview } from '../lib/query';
 import { darkTheme, lightTheme, radius } from '../lib/theme';
 import { applyHexOpacity } from '../lib/utils';
+import { useRunStore } from '../lib/store';
 
 type OverviewProps = {
   interval: Interval;
@@ -12,7 +13,8 @@ type OverviewProps = {
 export default function OverviewScreen({ interval }: OverviewProps) {
   const colorScheme = useColorScheme();
 
-  const [overview, setOverview] = useState<Overview | null>(null);
+  const overview = useRunStore((state) => state.overview);
+  const setOverview = useRunStore((state) => state.setOverview);
 
   useEffect(() => {
     async function queryOverview() {

@@ -6,17 +6,16 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-import { ActivityRun } from '../lib/model';
 import { getRuns } from '../lib/query';
 import Button from './button';
 import { darkTheme, lightTheme } from '../lib/theme';
 import { applyHexOpacity } from '../lib/utils';
 import Run from './run';
+import { useRunStore } from '../lib/store';
 
 export default function RunsView() {
   const colorScheme = useColorScheme();
-  const [cursor, setCursor] = useState<number | null>(0);
-  const [runs, setRuns] = useState<ActivityRun[]>([]);
+  const { runs, setCursor, addRuns, cursor } = useRunStore();
   const [loading, setLoading] = useState(false);
 
   const queryRuns = async (cursor: number | null) => {
@@ -25,8 +24,8 @@ export default function RunsView() {
     try {
       setLoading(true);
       const response = await getRuns(cursor);
-      setRuns((prev) => [...prev, ...response.runs]);
-      setCursor(response.cursor ?? null);
+      addRuns(response.runs);
+      setCursor(response.cursor);
     } catch (error) {
       console.error('❌ Failed to fetch runs:', error);
     } finally {
@@ -51,10 +50,15 @@ export default function RunsView() {
         gap: 20,
       }}>
       <Text style={[styles.recent, themeTextStyle]}>Recent Activities</Text>
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         {runs.length === 0 ? (
           <View
-            style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100%',
+            }}>
             <Text style={[themeNoRunsStyle, { fontSize: 16 }]}>
               No activities recorded yet.
             </Text>
