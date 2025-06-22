@@ -6,8 +6,8 @@ import {
   useColorScheme,
   ViewStyle,
 } from 'react-native';
-import { darkTheme, lightTheme, radius } from '../theme';
-import { applyHexOpacity } from '../utils';
+import { darkTheme, lightTheme, radius } from '../lib/theme';
+import { applyHexOpacity } from '../lib/utils';
 
 type ButtonProps = {
   onPress: () => void;
@@ -18,6 +18,7 @@ type ButtonProps = {
   textStyle?: TextStyle;
   variant?:
     | 'default'
+    | 'dark'
     | 'destructive'
     | 'outline'
     | 'secondary'
@@ -101,6 +102,9 @@ const variantLightStyles = StyleSheet.create({
   default: {
     backgroundColor: lightTheme.primary,
   },
+  dark: {
+    backgroundColor: lightTheme.foreground,
+  },
   destructive: {
     backgroundColor: lightTheme.destructive,
   },
@@ -116,9 +120,13 @@ const variantLightStyles = StyleSheet.create({
   link: {},
 });
 
+// pressed light styles
 const pressedVariantLightStyles = StyleSheet.create({
   default: {
     backgroundColor: applyHexOpacity(lightTheme.primary, 90),
+  },
+  dark: {
+    backgroundColor: applyHexOpacity(lightTheme.foreground, 90),
   },
   destructive: {
     backgroundColor: applyHexOpacity(lightTheme.destructive, 90),
@@ -140,6 +148,9 @@ const textVariantLightStyles = StyleSheet.create({
   default: {
     color: lightTheme.primaryForeground,
   },
+  dark: {
+    color: lightTheme.background,
+  },
   destructive: {
     color: lightTheme.primaryForeground,
   },
@@ -157,9 +168,11 @@ const textVariantLightStyles = StyleSheet.create({
   },
 });
 
+// text pressable light styles
 const textVariantPressableLightStyles = StyleSheet.create({
   default: {},
   destructive: {},
+  dark: {},
   outline: {
     color: lightTheme.accentForeground,
   },
@@ -175,8 +188,11 @@ const variantDarkStyles = StyleSheet.create({
   default: {
     backgroundColor: darkTheme.primary,
   },
+  dark: {
+    backgroundColor: darkTheme.background,
+  },
   destructive: {
-    backgroundColor: applyHexOpacity(darkTheme.destructive, 50),
+    backgroundColor: applyHexOpacity(darkTheme.destructive, 80),
   },
   outline: {
     borderWidth: 1,
@@ -190,12 +206,16 @@ const variantDarkStyles = StyleSheet.create({
   link: {},
 });
 
+// pressed dark styles
 const pressedVariantDarkStyles = StyleSheet.create({
   default: {
     backgroundColor: applyHexOpacity(darkTheme.primary, 90),
   },
+  dark: {
+    backgroundColor: applyHexOpacity(darkTheme.background, 90),
+  },
   destructive: {
-    backgroundColor: applyHexOpacity(darkTheme.destructive, 40),
+    backgroundColor: applyHexOpacity(darkTheme.destructive, 70),
   },
   outline: {
     backgroundColor: darkTheme.accent,
@@ -213,6 +233,9 @@ const pressedVariantDarkStyles = StyleSheet.create({
 const textVariantDarkStyles = StyleSheet.create({
   default: {
     color: darkTheme.primaryForeground,
+  },
+  dark: {
+    color: darkTheme.foreground,
   },
   destructive: {
     color: '#fff',
@@ -233,8 +256,10 @@ const textVariantDarkStyles = StyleSheet.create({
   },
 });
 
+// text pressable dark styles
 const textVariantPressableDarkStyles = StyleSheet.create({
   default: {},
+  dark: {},
   destructive: {},
   outline: {
     color: darkTheme.accentForeground,

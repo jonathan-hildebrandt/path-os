@@ -5,9 +5,9 @@ import {
   useColorScheme,
   ViewStyle,
 } from 'react-native';
-import { darkTheme, lightTheme, radius } from '../theme';
+import { darkTheme, lightTheme, radius } from '../lib/theme';
 import { Dispatch, SetStateAction, useState } from 'react';
-import { applyHexOpacity } from '../utils';
+import { applyHexOpacity } from '../lib/utils';
 
 type InputProps = {
   value: string;
