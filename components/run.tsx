@@ -10,9 +10,12 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { darkTheme, lightTheme, radius } from '../lib/theme';
 import { Link } from 'expo-router';
 import { applyHexOpacity } from '../lib/utils';
+import { useState } from 'react';
 
 export default function Run({ run }: { run: ActivityRun }) {
   const colorScheme = useColorScheme();
+
+  const [pressed, setPressed] = useState(false);
 
   const themeContainerStyle =
     colorScheme === 'light' ? styles.lightContainer : styles.darkContainer;
@@ -25,6 +28,15 @@ export default function Run({ run }: { run: ActivityRun }) {
       ? styles.lightThemeDescription
       : styles.darkThemeDescription;
 
+  const themePressedContainerStyle =
+    colorScheme === 'light'
+      ? pressed
+        ? styles.lightPressedContainer
+        : styles.lightContainer
+      : pressed
+      ? styles.darkPressedContainer
+      : styles.darkContainer;
+
   return (
     <Link
       key={run.id}
@@ -32,8 +44,10 @@ export default function Run({ run }: { run: ActivityRun }) {
         pathname: `/activity/${run.id}`,
       }}
       asChild>
-      <Pressable>
-        <View style={[styles.container, themeContainerStyle]}>
+      <Pressable
+        onPressIn={() => setPressed(true)}
+        onPressOut={() => setPressed(false)}>
+        <View style={[styles.container, themePressedContainerStyle]}>
           <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
             <Ionicons
               name='map-outline'
@@ -100,6 +114,14 @@ const styles = StyleSheet.create({
   darkContainer: {
     borderColor: darkTheme.border,
     backgroundColor: darkTheme.card,
+  },
+  lightPressedContainer: {
+    borderColor: lightTheme.border,
+    backgroundColor: lightTheme.secondary,
+  },
+  darkPressedContainer: {
+    borderColor: darkTheme.border,
+    backgroundColor: darkTheme.secondary,
   },
   lightText: {
     color: lightTheme.foreground,
