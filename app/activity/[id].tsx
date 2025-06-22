@@ -13,6 +13,7 @@ import { getRunById } from '../../lib/query';
 import SingleOverviewScreen from '../../components/single-overview';
 import Splits from '../../components/splits';
 import Heading from '../../components/heading';
+import Button from '../../components/button';
 
 export default function RunActivityScreen() {
   const colorScheme = useColorScheme();

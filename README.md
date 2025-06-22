@@ -9,6 +9,7 @@
 
 ### ToDo's
 
-- refractor styles to use StyleSheets
-- fix theme colors of splits
+- delete run
 - fix split generation to also include the last started km
+- refractor styles to use StyleSheets
+- comments
