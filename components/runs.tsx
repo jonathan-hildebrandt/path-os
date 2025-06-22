@@ -6,6 +6,8 @@ import {
   useColorScheme,
   View,
   ActivityIndicator,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
 } from 'react-native';
 import { getRuns } from '../lib/query';
 import { darkTheme, lightTheme } from '../lib/theme';
@@ -26,6 +28,7 @@ export default function RunsView() {
     try {
       setLoading(true);
       const response = await getRuns(cursor);
+
       addRuns(response.runs);
       setCursor(response.cursor);
     } catch (error) {
@@ -35,8 +38,19 @@ export default function RunsView() {
     }
   };
 
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const { contentOffset, layoutMeasurement, contentSize } = event.nativeEvent;
+
+    const isCloseToBottom =
+      contentOffset.y + layoutMeasurement.height >= contentSize.height - 50;
+
+    if (isCloseToBottom && !loading) {
+      queryRuns(cursor);
+    }
+  };
+
   useEffect(() => {
-    queryRuns(cursor); // initial fetch
+    queryRuns(cursor);
   }, []);
 
   const themeTextStyle =
@@ -51,6 +65,8 @@ export default function RunsView() {
       <FlatList
         data={runs}
         keyExtractor={(item) => item.id.toString()}
+        onScroll={handleScroll}
+        scrollEventThrottle={100}
         renderItem={({ item }) => <Run run={item} />}
         contentContainerStyle={{
           flexGrow: 1,
@@ -65,8 +81,6 @@ export default function RunsView() {
             </Text>
           ) : null
         }
-        onEndReachedThreshold={0.5}
-        onEndReached={() => queryRuns(cursor)}
         ListFooterComponent={
           loading ? (
             <ActivityIndicator

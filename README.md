@@ -13,3 +13,4 @@
 - fix split generation to also include the last started km
 - refractor styles to use StyleSheets
 - comments
+- understand handleScroll

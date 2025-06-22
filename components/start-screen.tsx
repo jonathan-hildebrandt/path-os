@@ -1,5 +1,6 @@
 import {
   Alert,
+  Linking,
   Modal,
   Pressable,
   StyleSheet,
@@ -73,7 +74,19 @@ export default function StartScreen({ setIsRunning }: StartScreenProps) {
               Alert.alert(
                 'Location Permission',
                 'PathOs requires location permission to track your run.',
-                [{ text: 'OK', style: 'destructive' }],
+                [
+                  {
+                    text: 'Cancel',
+                    style: 'cancel',
+                  },
+                  {
+                    text: 'Open Settings',
+                    style: 'default',
+                    onPress: () => {
+                      Linking.openSettings();
+                    },
+                  },
+                ],
                 { cancelable: true }
               );
               return;
