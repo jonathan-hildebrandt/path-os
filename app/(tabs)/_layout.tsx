@@ -1,16 +1,25 @@
 import { Tabs } from 'expo-router';
 import { useColorScheme } from 'react-native';
-import { darkTheme, lightTheme } from '../../theme';
+import { darkTheme, lightTheme } from '../../lib/theme';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useRunStore } from '../../lib/store';
+import { applyHexOpacity } from '../../lib/utils';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
+  const isRunning = useRunStore((state) => state.isRunning);
+
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: lightTheme.primary,
-        tabBarInactiveTintColor: lightTheme.mutedForeground,
+        // mute colors when running
+        tabBarActiveTintColor: isRunning
+          ? applyHexOpacity(lightTheme.primary, 40)
+          : lightTheme.primary,
+        tabBarInactiveTintColor: isRunning
+          ? applyHexOpacity(lightTheme.mutedForeground, 40)
+          : lightTheme.mutedForeground,
         headerStyle: {
           backgroundColor:
             colorScheme === 'light'
@@ -31,6 +40,14 @@ export default function TabLayout() {
       }}>
       <Tabs.Screen
         name='index'
+        // prevent tab press when running
+        listeners={{
+          tabPress: (e) => {
+            if (isRunning) {
+              e.preventDefault();
+            }
+          },
+        }}
         options={{
           headerShown: false,
           title: 'Run',
@@ -45,26 +62,19 @@ export default function TabLayout() {
       />
       <Tabs.Screen
         name='activity'
+        // prevent tab press when running
+        listeners={{
+          tabPress: (e) => {
+            if (isRunning) {
+              e.preventDefault();
+            }
+          },
+        }}
         options={{
           title: 'Activity',
-          headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
               name={focused ? 'list' : 'list'}
-              color={color}
-              size={24}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name='settings'
-        options={{
-          title: 'Settings',
-          headerShown: false,
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? 'settings-outline' : 'settings-outline'}
               color={color}
               size={24}
             />
