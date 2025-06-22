@@ -10,8 +10,7 @@
 ### ToDo's
 
 - refractor styles to use StyleSheets
-- comments
-- understand handleScroll
+- test on android
 - goal? notification?
 - background tracking?
 - assets?
