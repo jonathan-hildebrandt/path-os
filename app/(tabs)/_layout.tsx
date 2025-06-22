@@ -3,6 +3,7 @@ import { useColorScheme } from 'react-native';
 import { darkTheme, lightTheme } from '../../lib/theme';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRunStore } from '../../lib/store';
+import { applyHexOpacity } from '../../lib/utils';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -12,8 +13,12 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: lightTheme.primary,
-        tabBarInactiveTintColor: lightTheme.mutedForeground,
+        tabBarActiveTintColor: isRunning
+          ? applyHexOpacity(lightTheme.primary, 40)
+          : lightTheme.primary,
+        tabBarInactiveTintColor: isRunning
+          ? applyHexOpacity(lightTheme.mutedForeground, 40)
+          : lightTheme.mutedForeground,
         headerStyle: {
           backgroundColor:
             colorScheme === 'light'
@@ -34,10 +39,16 @@ export default function TabLayout() {
       }}>
       <Tabs.Screen
         name='index'
+        listeners={{
+          tabPress: (e) => {
+            if (isRunning) {
+              e.preventDefault();
+            }
+          },
+        }}
         options={{
-          headerShown: true,
+          headerShown: false,
           title: 'Run',
-          // tabBarButton: isRunning ? undefined : () => null,
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
               name={focused ? 'fitness' : 'fitness'}
@@ -49,9 +60,15 @@ export default function TabLayout() {
       />
       <Tabs.Screen
         name='activity'
+        listeners={{
+          tabPress: (e) => {
+            if (isRunning) {
+              e.preventDefault();
+            }
+          },
+        }}
         options={{
           title: 'Activity',
-          // tabBarButton: isRunning ? undefined : () => null,
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
               name={focused ? 'list' : 'list'}
