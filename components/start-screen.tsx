@@ -42,7 +42,7 @@ export default function StartScreen({ setIsRunning }: StartScreenProps) {
       <View style={styles.buttonContainer}>
         <Button
           variant={'default'}
-          style={styles.buttonContainer}
+          style={styles.buttonStyles}
           textStyle={styles.buttonTextStyles}
           onPress={async () => {
             const { status } =

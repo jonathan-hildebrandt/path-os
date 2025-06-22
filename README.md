@@ -9,7 +9,7 @@
 
 ### ToDo's
 
-- refractor styles to use StyleSheets
+- scrolling lagging?
 - test on android
 - test on ipad / android tablet
 - goal? notification?
