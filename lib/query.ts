@@ -418,6 +418,11 @@ export async function getRuns(rawCursor: number): Promise<{
   }
 }
 
+/**
+ * Retrieves a run by its ID from the database.
+ * @param runId - The ID of the run to retrieve.
+ * @returns Promise<Run> An object representing the run with its splits.
+ */
 export async function getRunById(runId: number): Promise<Run> {
   const db = await getDb();
 

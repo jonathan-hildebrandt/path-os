@@ -105,7 +105,7 @@ export function calculateSplitMetrics(
       kmDistance -= 1000;
     }
 
-    // If we reach the last location, we need to handle any remaining distance
+    // If last location is reached, handle any remaining distances
     if (i === locations.length - 1 && kmDistance > 0) {
       const lastKmEndTime = currLocation.timestamp;
       const lastKmDurationInSeconds = (lastKmEndTime - kmStartTime) / 1000;
