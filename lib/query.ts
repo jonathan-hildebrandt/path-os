@@ -221,6 +221,9 @@ export async function completeRun(
 
     const metrics = calculateRunMetrics(locations);
 
+    console.log('locations', locations);
+    console.log('metrics', metrics);
+
     const completedRun: CompletedRun = {
       id: runId,
       status: aborted ? RunStatus.ABORTED : RunStatus.COMPLETED,
@@ -275,6 +278,8 @@ export async function insertSplits(runId: number): Promise<void> {
     const locations = await getLocationsForRun(runId);
 
     const splits = calculateSplitMetrics(locations, runId);
+
+    console.log('split-metrics', splits);
 
     if (splits.length === 0) {
       console.warn(`⚠️ No splits to insert for run ${runId}.`);

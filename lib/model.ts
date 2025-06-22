@@ -202,7 +202,9 @@ export const RunSchema = z.object({
           .padStart(2, '0')
       );
     }),
-  elevationGain: z.number(),
+  elevationGain: z
+    .number()
+    .transform((value) => Math.round(value).toString() + ' m'),
   date: z
     .number()
     .nonnegative()
@@ -228,7 +230,9 @@ export const RunSchema = z.object({
               .padStart(2, '0')
           );
         }),
-      splitElevation: z.number(),
+      splitElevation: z
+        .number()
+        .transform((value) => Math.round(value).toString() + ' m'),
     })
   ),
 });

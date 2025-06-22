@@ -96,7 +96,8 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
         console.log(
           'Location updated:',
           location.coords.latitude,
-          location.coords.longitude
+          location.coords.longitude,
+          location.coords.altitude
         );
       },
       (error) => {
