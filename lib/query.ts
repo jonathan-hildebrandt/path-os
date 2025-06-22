@@ -203,20 +203,20 @@ export async function deleteRun(runId: number): Promise<void> {
 export async function completeRun(
   runId: number,
   { aborted }: { aborted: boolean } = { aborted: false }
-): Promise<void> {
+): Promise<boolean> {
   const db = await getDb();
 
   try {
     const locations = await getLocationsForRun(runId);
 
-    if (locations.length === 0) {
+    if (locations.length <= 1) {
       console.warn(
         `⚠️ No locations found for run ${runId}. Cannot complete run. Deleting run.`
       );
 
       await deleteRun(runId);
 
-      return;
+      return false;
     }
 
     const metrics = calculateRunMetrics(locations);
@@ -255,6 +255,8 @@ export async function completeRun(
     console.log(`✅ Run ${runId} completed successfully.`);
 
     await insertSplits(runId);
+
+    return true;
   } catch (error) {
     console.error(`❌ Failed to complete run ${runId}:`, error);
     throw error;

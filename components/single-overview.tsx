@@ -21,8 +21,8 @@ export default function SingleOverviewScreen({ run }: OverviewProps) {
 
   return (
     <View style={[styles.container, themeContainerStyle]}>
-      <View style={{ width: '100%', gap: 12, backgroundColor: '#FF000' }}>
-        <View style={{ width: '100%', backgroundColor: '#FF000' }}>
+      <View style={styles.subContainer}>
+        <View style={styles.headingContainer}>
           <View style={styles.statCard}>
             <Text style={[styles.km, themeTextStyle]}>
               {run?.distance?.distance}
@@ -32,12 +32,7 @@ export default function SingleOverviewScreen({ run }: OverviewProps) {
             </Text>
           </View>
         </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            gap: 20,
-            justifyContent: 'space-between',
-          }}>
+        <View style={styles.bodyContainer}>
           <View style={styles.statCard}>
             <Text style={[styles.text, themeTextStyle]}>{run?.avgPace}</Text>
             <Text style={[styles.description, themeDescriptionStyle]}>
@@ -74,6 +69,20 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  bodyContainer: {
+    flexDirection: 'row',
+    gap: 20,
+    justifyContent: 'space-between',
+  },
+  subContainer: {
+    width: '100%',
+    gap: 12,
+    backgroundColor: '#FF000',
+  },
+  headingContainer: {
+    width: '100%',
+    backgroundColor: '#FF000',
   },
   lightContainer: {
     borderColor: lightTheme.border,

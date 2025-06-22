@@ -68,6 +68,11 @@ export default function RunsView() {
   const themeNoRunsStyle =
     colorScheme === 'light' ? styles.lightNoRuns : styles.darkNoRuns;
 
+  const isEmptyContainer =
+    runs.length === 0 && !loading
+      ? styles.emptyContainer
+      : styles.notEmptyContainer;
+
   return (
     <View style={{ flex: 1, width: '90%' }}>
       <Text style={[styles.recent, themeTextStyle]}>Recent Activities</Text>
@@ -79,11 +84,8 @@ export default function RunsView() {
         // Limits how often scroll events will be fired while scrolling, specified as a time interval in ms.
         scrollEventThrottle={100}
         renderItem={({ item }) => <Run run={item} />}
-        contentContainerStyle={{
-          flexGrow: 1,
-          justifyContent: runs.length === 0 ? 'center' : 'flex-start',
-        }}
-        ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+        contentContainerStyle={[styles.contentContainer, isEmptyContainer]}
+        ItemSeparatorComponent={() => <View style={styles.heightTen} />}
         ListEmptyComponent={
           !loading ? (
             <Text
@@ -109,6 +111,18 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '600',
     marginBottom: 10,
+  },
+  heightTen: {
+    height: 10,
+  },
+  contentContainer: {
+    flexGrow: 1,
+  },
+  emptyContainer: {
+    justifyContent: 'center',
+  },
+  notEmptyContainer: {
+    justifyContent: 'flex-start',
   },
   lightText: {
     color: lightTheme.foreground,

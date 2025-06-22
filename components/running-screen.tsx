@@ -115,7 +115,11 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
     subscriptionRef.current = null;
 
     if (runId !== null) {
-      await completeRun(runId);
+      const res = await completeRun(runId);
+
+      if (!res) {
+        return;
+      }
 
       const resRun = await getRuns(0);
       const resOverview = await getOverview(interval);
