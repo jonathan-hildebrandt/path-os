@@ -12,3 +12,10 @@
 - assets?
 - goal? notification? (optional)
 - background tracking? (optional)
+
+### Abgabe - 26.06.2025 23:59
+
+- presentation (olli)
+- apk (jonathan)
+- project files (jonathan)
+- image docs (jonathan)
