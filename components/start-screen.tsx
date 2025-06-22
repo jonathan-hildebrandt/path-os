@@ -27,14 +27,8 @@ export default function StartScreen({ setIsRunning }: StartScreenProps) {
       : styles.darkDescriptionText;
 
   return (
-    <View style={{ flex: 1 }}>
-      <View
-        style={{
-          flex: 1,
-          gap: 10,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
+    <View style={styles.flexOne}>
+      <View style={styles.container}>
         <Text style={[styles.text, themeTextStyle]}>PathOs</Text>
         <Text
           style={[
@@ -45,25 +39,11 @@ export default function StartScreen({ setIsRunning }: StartScreenProps) {
           Start a new run
         </Text>
       </View>
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
+      <View style={styles.buttonContainer}>
         <Button
           variant={'default'}
-          style={{
-            borderRadius: '100%',
-            width: 150,
-            height: 150,
-          }}
-          textStyle={{
-            fontSize: 36,
-            lineHeight: 40,
-            fontWeight: 'bold',
-            textAlign: 'center',
-          }}
+          style={styles.buttonContainer}
+          textStyle={styles.buttonTextStyles}
           onPress={async () => {
             const { status } =
               await Location.requestForegroundPermissionsAsync();
@@ -105,11 +85,36 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  flexOne: {
+    flex: 1,
+  },
+  buttonContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  container: {
+    flex: 1,
+    gap: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   lightText: {
     color: lightTheme.foreground,
   },
   darkText: {
     color: darkTheme.foreground,
+  },
+  buttonStyles: {
+    borderRadius: '100%',
+    width: 150,
+    height: 150,
+  },
+  buttonTextStyles: {
+    fontSize: 36,
+    lineHeight: 40,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   descriptionText: {
     fontSize: 20,
