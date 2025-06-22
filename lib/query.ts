@@ -9,6 +9,7 @@ import {
   CursorSchema,
   Overview,
   OverviewSchema,
+  Run,
   RunIdSchema,
   RunSchema,
   RunStatus,
@@ -383,7 +384,7 @@ export async function getRuns(rawCursor: number): Promise<{
   runs: ActivityRun[];
   cursor: number | null;
 }> {
-  const LIMIT = 2;
+  const LIMIT = 10;
 
   const cursor = CursorSchema.parse({ cursor: rawCursor }).cursor;
 
@@ -417,7 +418,7 @@ export async function getRuns(rawCursor: number): Promise<{
   }
 }
 
-export async function getRunById(runId: number) {
+export async function getRunById(runId: number): Promise<Run> {
   const db = await getDb();
 
   try {
@@ -456,7 +457,7 @@ export async function getRunById(runId: number) {
       splits,
     });
 
-    console.log(`✅ Retrieved run with ID: ${JSON.stringify(parsed)}`);
+    return parsed;
   } catch (error) {
     console.error(`❌ getRunById failed for run ${runId}:`, error);
     throw error;

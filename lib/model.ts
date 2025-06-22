@@ -202,6 +202,7 @@ export const RunSchema = z.object({
           .padStart(2, '0')
       );
     }),
+  elevationGain: z.number(),
   date: z
     .number()
     .nonnegative()

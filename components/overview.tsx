@@ -10,6 +10,8 @@ type OverviewProps = {
   interval: Interval;
 };
 
+//TODO fix race condition when changing interval
+
 export default function OverviewScreen({ interval }: OverviewProps) {
   const colorScheme = useColorScheme();
 
