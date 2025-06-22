@@ -1,10 +1,12 @@
 import { create } from 'zustand';
 import { ActivityRun, Interval, Overview } from './model';
+import { getOverview } from './query';
 
 export type RunStore = {
   runs: ActivityRun[];
   addRuns: (runs: ActivityRun[]) => void;
   addNewestRun: (run: ActivityRun) => void;
+  removeRun: (id: number) => void;
   cursor: number | null;
   setCursor: (cursor: number | null) => void;
   interval: Interval;
@@ -34,4 +36,10 @@ export const useRunStore = create<RunStore>()((set) => ({
       runs: [newestRun, ...state.runs],
       cursor: state.cursor === null ? null : state.cursor + 1,
     })),
+  removeRun: (id: number) => {
+    set((state) => ({
+      runs: state.runs.filter((run) => run.id !== id),
+      cursor: state.cursor === null ? null : state.cursor - 1,
+    }));
+  },
 }));
