@@ -9,8 +9,7 @@
 
 ### ToDo's
 
-- delete run
 - fix split generation to also include the last started km
+- understand handleScroll
 - refractor styles to use StyleSheets
 - comments
-- understand handleScroll
