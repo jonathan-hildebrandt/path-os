@@ -9,8 +9,6 @@
 
 ### ToDo's
 
-- elevation wrong display format
-- on mobile, locations are but no distance change
 - test build locally
 - assets?
 - goal? notification? (optional)
