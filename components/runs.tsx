@@ -74,7 +74,7 @@ export default function RunsView() {
       : styles.notEmptyContainer;
 
   return (
-    <View style={{ flex: 1, width: '90%' }}>
+    <View style={styles.container}>
       <Text style={[styles.recent, themeTextStyle]}>Recent Activities</Text>
 
       <FlatList
@@ -88,8 +88,7 @@ export default function RunsView() {
         ItemSeparatorComponent={() => <View style={styles.heightTen} />}
         ListEmptyComponent={
           !loading ? (
-            <Text
-              style={[themeNoRunsStyle, { fontSize: 16, textAlign: 'center' }]}>
+            <Text style={[themeNoRunsStyle, styles.empty]}>
               No activities recorded yet.
             </Text>
           ) : null
@@ -97,7 +96,7 @@ export default function RunsView() {
         ListFooterComponent={
           loading ? (
             <ActivityIndicator
-              style={{ marginVertical: runs.length !== 0 ? 20 : 0 }}
+              style={runs.length > 0 && styles.isNotEmptyMargin}
             />
           ) : null
         }
@@ -107,6 +106,10 @@ export default function RunsView() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: '90%',
+  },
   recent: {
     fontSize: 24,
     fontWeight: '600',
@@ -118,6 +121,10 @@ const styles = StyleSheet.create({
   contentContainer: {
     flexGrow: 1,
   },
+  empty: {
+    fontSize: 16,
+    textAlign: 'center',
+  },
   emptyContainer: {
     justifyContent: 'center',
   },
@@ -126,6 +133,9 @@ const styles = StyleSheet.create({
   },
   lightText: {
     color: lightTheme.foreground,
+  },
+  isNotEmptyMargin: {
+    marginVertical: 20,
   },
   darkText: {
     color: darkTheme.foreground,
