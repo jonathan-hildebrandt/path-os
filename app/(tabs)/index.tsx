@@ -5,8 +5,7 @@ import {
   Keyboard,
   View,
 } from 'react-native';
-import { darkTheme, lightTheme, radius } from '../../lib/theme';
-import { useState } from 'react';
+import { darkTheme, lightTheme } from '../../lib/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import StartScreen from '../../components/start-screen';
 import RunningScreen from '../../components/running-screen';
@@ -55,12 +54,6 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   safeAreaView: {
     flex: 1,
-  },
-  text: {
-    fontSize: 20,
-    padding: 10,
-    borderWidth: 1,
-    borderRadius: radius,
   },
   lightSafeAreaView: {
     backgroundColor: lightTheme.background,

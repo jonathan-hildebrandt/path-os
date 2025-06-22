@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { View, StyleSheet, useColorScheme } from 'react-native';
-import { darkTheme, lightTheme, radius } from '../../lib/theme';
+import { darkTheme, lightTheme } from '../../lib/theme';
 import Overview from '../../components/overview';
 import Tabs from '../../components/tabs';
 import RunsView from '../../components/runs';
@@ -45,24 +45,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  text: {
-    fontSize: 20,
-    padding: 10,
-    borderWidth: 1,
-    borderRadius: radius,
-  },
   lightContainer: {
     backgroundColor: lightTheme.background,
   },
   darkContainer: {
     backgroundColor: darkTheme.background,
-  },
-  lightThemeText: {
-    color: lightTheme.foreground,
-    borderColor: lightTheme.border,
-  },
-  darkThemeText: {
-    color: darkTheme.foreground,
-    borderColor: darkTheme.border,
   },
 });

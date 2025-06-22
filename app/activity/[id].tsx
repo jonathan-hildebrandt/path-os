@@ -13,7 +13,6 @@ import { getRunById } from '../../lib/query';
 import SingleOverviewScreen from '../../components/single-overview';
 import Splits from '../../components/splits';
 import Heading from '../../components/heading';
-import Button from '../../components/button';
 
 export default function RunActivityScreen() {
   const colorScheme = useColorScheme();
@@ -22,11 +21,6 @@ export default function RunActivityScreen() {
   const [isLoading, setIsLoading] = useState(true);
 
   const [run, setRun] = useState<Run | null>(null);
-
-  const themeSafeAreaViewStyle =
-    colorScheme === 'light'
-      ? styles.lightSafeAreaView
-      : styles.darkSafeAreaView;
 
   useEffect(() => {
     // Prevent race condition if the component unmounts before the async call completes
@@ -54,6 +48,11 @@ export default function RunActivityScreen() {
       ignore = true;
     };
   }, [id]);
+
+  const themeSafeAreaViewStyle =
+    colorScheme === 'light'
+      ? styles.lightSafeAreaView
+      : styles.darkSafeAreaView;
 
   return (
     <SafeAreaView style={[styles.safeAreaView, themeSafeAreaViewStyle]}>

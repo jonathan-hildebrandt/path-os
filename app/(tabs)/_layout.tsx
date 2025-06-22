@@ -13,6 +13,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
+        // mute colors when running
         tabBarActiveTintColor: isRunning
           ? applyHexOpacity(lightTheme.primary, 40)
           : lightTheme.primary,
@@ -39,6 +40,7 @@ export default function TabLayout() {
       }}>
       <Tabs.Screen
         name='index'
+        // prevent tab press when running
         listeners={{
           tabPress: (e) => {
             if (isRunning) {
@@ -60,6 +62,7 @@ export default function TabLayout() {
       />
       <Tabs.Screen
         name='activity'
+        // prevent tab press when running
         listeners={{
           tabPress: (e) => {
             if (isRunning) {
@@ -78,19 +81,6 @@ export default function TabLayout() {
           ),
         }}
       />
-      {/* <Tabs.Screen
-        name='settings'
-        options={{
-          title: 'Settings',
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              name={focused ? 'settings-outline' : 'settings-outline'}
-              color={color}
-              size={24}
-            />
-          ),
-        }}
-      /> */}
     </Tabs>
   );
 }
