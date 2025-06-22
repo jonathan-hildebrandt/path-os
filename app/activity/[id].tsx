@@ -1,5 +1,10 @@
 import { useLocalSearchParams } from 'expo-router';
-import { StyleSheet, useColorScheme, View } from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  useColorScheme,
+  View,
+} from 'react-native';
 import { darkTheme, lightTheme } from '../../lib/theme';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect, useState } from 'react';
@@ -7,10 +12,13 @@ import { Run } from '../../lib/model';
 import { getRunById } from '../../lib/query';
 import SingleOverviewScreen from '../../components/single-overview';
 import Splits from '../../components/splits';
+import Heading from '../../components/heading';
 
 export default function RunActivityScreen() {
   const colorScheme = useColorScheme();
   const { id } = useLocalSearchParams();
+
+  const [isLoading, setIsLoading] = useState(true);
 
   const [run, setRun] = useState<Run | null>(null);
 
@@ -20,25 +28,45 @@ export default function RunActivityScreen() {
       : styles.darkSafeAreaView;
 
   useEffect(() => {
+    // Prevent race condition if the component unmounts before the async call completes
+    let ignore = false;
+
     async function fetchRun() {
       try {
+        setIsLoading(true);
         const res = await getRunById(Number(id));
-
-        setRun(res);
+        if (!ignore) {
+          setRun(res);
+        }
       } catch (error) {
         console.error('Failed to fetch run data:', error);
+      } finally {
+        if (!ignore) {
+          setIsLoading(false);
+        }
       }
     }
 
     fetchRun();
+
+    return () => {
+      ignore = true;
+    };
   }, [id]);
 
   return (
     <SafeAreaView style={[styles.safeAreaView, themeSafeAreaViewStyle]}>
-      <View style={styles.container}>
-        <SingleOverviewScreen run={run} />
-        <Splits run={run} />
-      </View>
+      {!isLoading ? (
+        <View style={styles.container}>
+          <Heading />
+          <SingleOverviewScreen run={run} />
+          <Splits run={run} />
+        </View>
+      ) : (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size={'small'} />
+        </View>
+      )}
     </SafeAreaView>
   );
 }
@@ -56,6 +84,11 @@ const styles = StyleSheet.create({
     gap: 20,
     width: '90%',
     height: '95%',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   lightSafeAreaView: {
     backgroundColor: lightTheme.background,

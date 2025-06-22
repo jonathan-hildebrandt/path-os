@@ -1,34 +1,55 @@
-import { useEffect } from 'react';
-import { StyleSheet, Text, useColorScheme, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  useColorScheme,
+  View,
+} from 'react-native';
 import { Interval } from '../lib/model';
 import { getOverview } from '../lib/query';
 import { darkTheme, lightTheme, radius } from '../lib/theme';
 import { applyHexOpacity } from '../lib/utils';
 import { useRunStore } from '../lib/store';
+import { MotiView } from 'moti';
 
 type OverviewProps = {
   interval: Interval;
 };
-
-//TODO fix race condition when changing interval
 
 export default function OverviewScreen({ interval }: OverviewProps) {
   const colorScheme = useColorScheme();
 
   const overview = useRunStore((state) => state.overview);
   const setOverview = useRunStore((state) => state.setOverview);
+  const [isPulsing, setIsPulsing] = useState(true);
 
   useEffect(() => {
+    // Prevent race condition if the component unmounts before the async call completes
+    let ignore = false;
+
     async function queryOverview() {
       try {
+        setIsPulsing(true);
         const fetchedOverview = await getOverview(interval);
-        setOverview(fetchedOverview);
+        if (!ignore) {
+          setOverview(fetchedOverview);
+        }
       } catch (error) {
+        if (ignore) return;
         console.error('Failed to fetch overview:', error);
+      } finally {
+        if (!ignore) {
+          setIsPulsing(false);
+        }
       }
     }
 
     queryOverview();
+
+    return () => {
+      ignore = true;
+    };
   }, [interval]);
 
   const themeTextStyle =
@@ -42,53 +63,62 @@ export default function OverviewScreen({ interval }: OverviewProps) {
 
   return (
     <View style={[styles.container, themeContainerStyle]}>
-      {overview ? (
-        <View style={{ width: '100%', gap: 12, backgroundColor: '#FF000' }}>
-          <View style={{ width: '100%', backgroundColor: '#FF000' }}>
-            <View style={styles.statCard}>
-              <Text style={[styles.km, themeTextStyle]}>
-                {overview.totalDistance?.distance}
-              </Text>
-              <Text style={[styles.kmDescription, themeDescriptionStyle]}>
-                {overview.totalDistance?.unit}
-              </Text>
-            </View>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              gap: 20,
-              justifyContent: 'space-between',
-            }}>
-            <View style={styles.statCard}>
-              <Text style={[styles.text, themeTextStyle]}>
-                {overview.totalRuns}
-              </Text>
-              <Text style={[styles.description, themeDescriptionStyle]}>
-                Runs
-              </Text>
-            </View>
-            <View style={styles.statCard}>
-              <Text style={[styles.text, themeTextStyle]}>
-                {overview.avgPace}
-              </Text>
-              <Text style={[styles.description, themeDescriptionStyle]}>
-                Avg. Pace
-              </Text>
-            </View>
-            <View style={styles.statCard}>
-              <Text style={[styles.text, themeTextStyle]}>
-                {overview.totalDuration?.duration}
-              </Text>
-              <Text style={[styles.description, themeDescriptionStyle]}>
-                {overview.totalDuration?.unit}
-              </Text>
-            </View>
+      <MotiView
+        key={isPulsing ? 'pulsing' : 'static'}
+        from={{ opacity: 1 }}
+        animate={isPulsing ? { opacity: [1, 0.6, 1] } : { opacity: 1 }}
+        transition={{
+          loop: isPulsing,
+          type: 'timing',
+          duration: 800,
+        }}
+        style={{
+          width: '100%',
+          gap: 12,
+          backgroundColor: '#FF000',
+        }}>
+        <View style={{ width: '100%', backgroundColor: '#FF000' }}>
+          <View style={styles.statCard}>
+            <Text style={[styles.km, themeTextStyle]}>
+              {overview?.totalDistance?.distance ?? '-'}
+            </Text>
+            <Text style={[styles.kmDescription, themeDescriptionStyle]}>
+              {overview?.totalDistance?.unit ?? 'Kilometers'}
+            </Text>
           </View>
         </View>
-      ) : (
-        <Text>No data available for this interval.</Text>
-      )}
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: 20,
+            justifyContent: 'space-between',
+          }}>
+          <View style={styles.statCard}>
+            <Text style={[styles.text, themeTextStyle]}>
+              {overview?.totalRuns ?? '-'}
+            </Text>
+            <Text style={[styles.description, themeDescriptionStyle]}>
+              Runs
+            </Text>
+          </View>
+          <View style={styles.statCard}>
+            <Text style={[styles.text, themeTextStyle]}>
+              {overview?.avgPace ?? '-'}
+            </Text>
+            <Text style={[styles.description, themeDescriptionStyle]}>
+              Avg. Pace
+            </Text>
+          </View>
+          <View style={styles.statCard}>
+            <Text style={[styles.text, themeTextStyle]}>
+              {overview?.totalDuration?.duration ?? '-'}
+            </Text>
+            <Text style={[styles.description, themeDescriptionStyle]}>
+              {overview?.totalDuration?.unit ?? 'Minutes'}
+            </Text>
+          </View>
+        </View>
+      </MotiView>
     </View>
   );
 }
@@ -140,5 +170,15 @@ const styles = StyleSheet.create({
   },
   darkThemeDescription: {
     color: applyHexOpacity(darkTheme.foreground, 60),
+  },
+  loadingOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
   },
 });
