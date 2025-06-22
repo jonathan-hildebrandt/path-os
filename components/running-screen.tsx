@@ -71,6 +71,10 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
     return () => clearInterval(interval);
   }, [isPaused]);
 
+  /**
+   * Starts tracking the user's location and updates the locations state.
+   * @param runId The ID of the run to associate the locations with.
+   */
   async function startTracking(runId: number) {
     const { status } = await Location.requestForegroundPermissionsAsync();
 
@@ -79,11 +83,12 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
       return;
     }
 
+    // subscribe to location updates
     const subscription = await Location.watchPositionAsync(
       {
         accuracy: Location.Accuracy.Highest,
-        timeInterval: 1000,
-        distanceInterval: 5,
+        timeInterval: 1000, // Minimum time between updates (in ms)
+        distanceInterval: 5, // Minimum distance (in meters) to trigger an update
       },
       async (location) => {
         setLocations((prevLocations) => [...prevLocations, location]);
@@ -102,6 +107,9 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
     subscriptionRef.current = subscription;
   }
 
+  /**
+   * Stops tracking the user's location, completes the run, and updates the overview.
+   */
   async function stopTracking() {
     subscriptionRef.current?.remove();
     subscriptionRef.current = null;
@@ -126,6 +134,9 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
     setLocations([]);
   }
 
+  /**
+   * Pauses the tracking of the user's location.
+   */
   function pauseTracking() {
     if (subscriptionRef.current) {
       subscriptionRef.current.remove();
@@ -134,6 +145,9 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
     }
   }
 
+  /**
+   * Resumes tracking the user's location if a run is in progress.
+   */
   function resumeTracking() {
     if (runId !== null) {
       startTracking(runId);

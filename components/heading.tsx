@@ -22,8 +22,8 @@ export default function Heading({ run }: HeadingProps) {
     colorScheme === 'light' ? styles.lightText : styles.darkText;
 
   return (
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-      <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
+    <View style={styles.container}>
+      <View style={styles.leftContainer}>
         <Ionicons
           name='map-outline'
           size={30}
@@ -74,6 +74,15 @@ export default function Heading({ run }: HeadingProps) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  leftContainer: {
+    flexDirection: 'row',
+    gap: 10,
+    alignItems: 'center',
+  },
   text: {
     fontSize: 30,
     fontWeight: '500',

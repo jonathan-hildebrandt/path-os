@@ -38,11 +38,21 @@ export default function RunsView() {
     }
   };
 
+  // Handle scroll event to detect when the user is close to the bottom of the list
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const { contentOffset, layoutMeasurement, contentSize } = event.nativeEvent;
+    const {
+      contentOffset, // How far the user has scrolled
+      layoutMeasurement, // The visible height of the scrollable container.
+      contentSize, // The total height of all scrollable content.
+    } = event.nativeEvent;
 
+    // Adjust the threshold (50) as needed for when you want to trigger loading more runs
+    const THRESHOLD = 50;
+
+    // Check if the user is close to the bottom of the list
     const isCloseToBottom =
-      contentOffset.y + layoutMeasurement.height >= contentSize.height - 50;
+      contentOffset.y + layoutMeasurement.height >= // Gives the bottom of the visible area
+      contentSize.height - THRESHOLD; // Gives the total height of the content minus the threshold
 
     if (isCloseToBottom && !loading) {
       queryRuns(cursor);
@@ -66,6 +76,7 @@ export default function RunsView() {
         data={runs}
         keyExtractor={(item) => item.id.toString()}
         onScroll={handleScroll}
+        // Limits how often scroll events will be fired while scrolling, specified as a time interval in ms.
         scrollEventThrottle={100}
         renderItem={({ item }) => <Run run={item} />}
         contentContainerStyle={{

@@ -120,6 +120,7 @@ const variantLightStyles = StyleSheet.create({
   link: {},
 });
 
+// pressed light styles
 const pressedVariantLightStyles = StyleSheet.create({
   default: {
     backgroundColor: applyHexOpacity(lightTheme.primary, 90),
@@ -167,6 +168,7 @@ const textVariantLightStyles = StyleSheet.create({
   },
 });
 
+// text pressable light styles
 const textVariantPressableLightStyles = StyleSheet.create({
   default: {},
   destructive: {},
@@ -204,6 +206,7 @@ const variantDarkStyles = StyleSheet.create({
   link: {},
 });
 
+// pressed dark styles
 const pressedVariantDarkStyles = StyleSheet.create({
   default: {
     backgroundColor: applyHexOpacity(darkTheme.primary, 90),
@@ -253,6 +256,7 @@ const textVariantDarkStyles = StyleSheet.create({
   },
 });
 
+// text pressable dark styles
 const textVariantPressableDarkStyles = StyleSheet.create({
   default: {},
   dark: {},

@@ -17,9 +17,6 @@ export default function Run({ run }: { run: ActivityRun }) {
 
   const [pressed, setPressed] = useState(false);
 
-  const themeContainerStyle =
-    colorScheme === 'light' ? styles.lightContainer : styles.darkContainer;
-
   const themeTextStyle =
     colorScheme === 'light' ? styles.lightText : styles.darkText;
 

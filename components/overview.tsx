@@ -66,12 +66,8 @@ export default function OverviewScreen({ interval }: OverviewProps) {
           type: 'timing',
           duration: 800,
         }}
-        style={{
-          width: '100%',
-          gap: 12,
-          backgroundColor: '#FF000',
-        }}>
-        <View style={{ width: '100%', backgroundColor: '#FF000' }}>
+        style={styles.motiView}>
+        <View>
           <View style={styles.statCard}>
             <Text style={[styles.km, themeTextStyle]}>
               {overview?.totalDistance?.distance ?? '-'}
@@ -81,12 +77,7 @@ export default function OverviewScreen({ interval }: OverviewProps) {
             </Text>
           </View>
         </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            gap: 20,
-            justifyContent: 'space-between',
-          }}>
+        <View style={styles.runContainer}>
           <View style={styles.statCard}>
             <Text style={[styles.text, themeTextStyle]}>
               {overview?.totalRuns ?? '-'}
@@ -126,8 +117,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  motiView: {
+    width: '100%',
+    gap: 12,
+    backgroundColor: '#FF000',
+  },
   lightContainer: {
     borderColor: lightTheme.border,
+  },
+  runContainer: {
+    flexDirection: 'row',
+    gap: 20,
+    justifyContent: 'space-between',
   },
   darkContainer: {
     borderColor: darkTheme.border,
@@ -164,15 +165,5 @@ const styles = StyleSheet.create({
   },
   darkThemeDescription: {
     color: applyHexOpacity(darkTheme.foreground, 60),
-  },
-  loadingOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
   },
 });
