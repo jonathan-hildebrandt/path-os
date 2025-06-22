@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { Text, View, StyleSheet, useColorScheme } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
 import Button from './button';
-import { darkTheme, lightTheme, radius } from '../lib/theme';
+import { darkTheme, lightTheme } from '../lib/theme';
 import {
   completeRun,
   createRun,
@@ -17,7 +17,7 @@ import {
   getTotalDistanceInKilometersString,
 } from '../lib/location';
 import { applyHexOpacity, msToMinutesAndSeconds } from '../lib/utils';
-import { useRunStore } from '../lib/store';
+import { useOverviewStore, useRunStore } from '../lib/store';
 
 interface RunningScreenProps {
   setIsRunning: (isRunning: boolean) => void;
@@ -31,8 +31,8 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
   const [runId, setRunId] = useState<number | null>(null);
 
   const addNewestRun = useRunStore((state) => state.addNewestRun);
-  const interval = useRunStore((state) => state.interval);
-  const setOverview = useRunStore((state) => state.setOverview);
+  const interval = useOverviewStore((state) => state.interval);
+  const setOverview = useOverviewStore((state) => state.setOverview);
 
   const [timer, setTimer] = useState(0);
 

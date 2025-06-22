@@ -1,8 +1,6 @@
 import {
   Alert,
   Linking,
-  Modal,
-  Pressable,
   StyleSheet,
   Text,
   useColorScheme,

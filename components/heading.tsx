@@ -5,7 +5,7 @@ import { Run } from '../lib/model';
 import Button from './button';
 import { router } from 'expo-router';
 import { deleteRun, getOverview } from '../lib/query';
-import { useRunStore } from '../lib/store';
+import { useOverviewStore, useRunStore } from '../lib/store';
 
 type HeadingProps = {
   run: Run | null;
@@ -15,8 +15,8 @@ export default function Heading({ run }: HeadingProps) {
   const colorScheme = useColorScheme();
 
   const removeRun = useRunStore((state) => state.removeRun);
-  const setOverview = useRunStore((state) => state.setOverview);
-  const interval = useRunStore((state) => state.interval);
+  const setOverview = useOverviewStore((state) => state.setOverview);
+  const interval = useOverviewStore((state) => state.interval);
 
   const themeTextStyle =
     colorScheme === 'light' ? styles.lightText : styles.darkText;

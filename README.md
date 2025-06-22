@@ -14,3 +14,4 @@
 - understand handleScroll
 - goal? notification?
 - background tracking?
+- assets?

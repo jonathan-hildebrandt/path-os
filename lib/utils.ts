@@ -67,6 +67,11 @@ export function getDistanceInMeter(
   return distanceInMeters;
 }
 
+/**
+ * Formats a duration in the right format based on whether hours are present.
+ * @param seconds - The duration in seconds to format.
+ * @returns A string formatted as "HH:MM:SS" if hours are present, otherwise "MM:SS".
+ */
 export function formatDurationDynamic(seconds: number): string {
   const duration = intervalToDuration({ start: 0, end: seconds * 1000 });
 
@@ -85,6 +90,11 @@ export function formatDurationDynamic(seconds: number): string {
   }
 }
 
+/**
+ * Determines the unit of duration based on the number of seconds.
+ * @param seconds - The duration in seconds to evaluate.
+ * @returns A string indicating the unit of duration, either "Hours" or "Minutes".
+ */
 export function getDurationUnit(seconds: number): string {
   const duration = intervalToDuration({ start: 0, end: seconds * 1000 });
 
@@ -95,6 +105,11 @@ export function getDurationUnit(seconds: number): string {
   }
 }
 
+/**
+ * Formats a distance in meters to a string with appropriate units.
+ * @param meters - The distance in meters to format.
+ * @returns A string representing the distance, formatted to one decimal place and using a comma as the decimal separator.
+ */
 export function getDistanceDynamic(meters: number): string {
   if (meters >= 1000) {
     return (meters / 1000).toFixed(1).replace('.', ',');
@@ -102,6 +117,11 @@ export function getDistanceDynamic(meters: number): string {
   return meters.toFixed(1).replace('.', ',');
 }
 
+/**
+ * Determines the unit of distance based on the value in meters.
+ * @param meters - The distance in meters to evaluate.
+ * @returns A string indicating the unit of distance, either "Kilometers" or "Meters".
+ */
 export function getDistanceUnit(meters: number): string {
   if (meters >= 1000) {
     return 'Kilometers';
@@ -109,6 +129,11 @@ export function getDistanceUnit(meters: number): string {
   return 'Meters';
 }
 
+/**
+ * Capitalizes the first letter of a given string.
+ * @param string - The string to capitalize.
+ * @returns The input string with the first letter capitalized.
+ */
 export function capitalizeFirstLetter(string: string): string {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }

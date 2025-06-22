@@ -4,13 +4,13 @@ import { darkTheme, lightTheme } from '../../lib/theme';
 import Overview from '../../components/overview';
 import Tabs from '../../components/tabs';
 import RunsView from '../../components/runs';
-import { useRunStore } from '../../lib/store';
+import { useOverviewStore } from '../../lib/store';
 
 export default function ActivityScreen() {
   const colorScheme = useColorScheme();
 
-  const interval = useRunStore((state) => state.interval);
-  const setInterval = useRunStore((state) => state.setInterval);
+  const interval = useOverviewStore((state) => state.interval);
+  const setInterval = useOverviewStore((state) => state.setInterval);
 
   const themeContainerStyle =
     colorScheme === 'light' ? styles.lightContainer : styles.darkContainer;

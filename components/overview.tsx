@@ -1,16 +1,10 @@
 import { useEffect, useState } from 'react';
-import {
-  ActivityIndicator,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, useColorScheme, View } from 'react-native';
 import { Interval } from '../lib/model';
 import { getOverview } from '../lib/query';
 import { darkTheme, lightTheme, radius } from '../lib/theme';
 import { applyHexOpacity } from '../lib/utils';
-import { useRunStore } from '../lib/store';
+import { useOverviewStore } from '../lib/store';
 import { MotiView } from 'moti';
 
 type OverviewProps = {
@@ -20,8 +14,8 @@ type OverviewProps = {
 export default function OverviewScreen({ interval }: OverviewProps) {
   const colorScheme = useColorScheme();
 
-  const overview = useRunStore((state) => state.overview);
-  const setOverview = useRunStore((state) => state.setOverview);
+  const overview = useOverviewStore((state) => state.overview);
+  const setOverview = useOverviewStore((state) => state.setOverview);
   const [isPulsing, setIsPulsing] = useState(true);
 
   useEffect(() => {
