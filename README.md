@@ -10,4 +10,5 @@
 ### ToDo's
 
 - refractor styles to use StyleSheets
-- add splits ui
+- fix theme colors of splits
+- fix split generation to also include the last started km
