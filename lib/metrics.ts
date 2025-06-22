@@ -104,21 +104,21 @@ export function calculateSplitMetrics(
       kmStartElevation = currLocation.altitudeInMeters ?? 0;
       kmDistance -= 1000;
     }
-  }
 
-  // Handle any remaining distance if it exists
-  if (splits.length === 0 && kmDistance > 0) {
-    const lastKmEndTime = locations[locations.length - 1].timestamp;
-    const lastKmDurationInSeconds = (lastKmEndTime - kmStartTime) / 1000;
-    const lastElevationGain =
-      (locations[locations.length - 1].altitudeInMeters ?? 0) -
-      kmStartElevation;
-    splits.push({
-      runId,
-      km: currentKm + 1,
-      avgPaceInSeconds: Math.round(lastKmDurationInSeconds),
-      elevationGainInMeters: lastElevationGain,
-    });
+    // If we reach the last location, we need to handle any remaining distance
+    if (i === locations.length - 1 && kmDistance > 0) {
+      const lastKmEndTime = currLocation.timestamp;
+      const lastKmDurationInSeconds = (lastKmEndTime - kmStartTime) / 1000;
+      const lastElevationGain =
+        (currLocation.altitudeInMeters ?? 0) - kmStartElevation;
+
+      splits.push({
+        runId,
+        km: currentKm + 1,
+        avgPaceInSeconds: (1000 / kmDistance) * lastKmDurationInSeconds,
+        elevationGainInMeters: lastElevationGain,
+      });
+    }
   }
 
   return splits;
