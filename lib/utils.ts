@@ -77,14 +77,12 @@ export function formatDurationDynamic(seconds: number): string {
       2,
       '0'
     )}:${String(secs).padStart(2, '0')}`;
-  }
-  if (minutes > 0) {
+  } else {
     return `${String(minutes).padStart(2, '0')}:${String(secs).padStart(
       2,
       '0'
     )}`;
   }
-  return `${secs}`;
 }
 
 export function getDurationUnit(seconds: number): string {
@@ -92,11 +90,9 @@ export function getDurationUnit(seconds: number): string {
 
   if (duration.hours && duration.hours > 0) {
     return 'Hours';
-  }
-  if (duration.minutes && duration.minutes > 0) {
+  } else {
     return 'Minutes';
   }
-  return 'Seconds';
 }
 
 export function getDistanceDynamic(meters: number): string {

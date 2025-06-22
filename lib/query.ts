@@ -362,11 +362,11 @@ export async function getOverview(
 
     return {
       totalRuns: parsed.totalRuns ?? '0',
-      totalDistance: parsed.totalDistance ?? { distance: '0', unit: 'm' },
-      avgPace: parsed.avgPace ?? '0',
+      totalDistance: parsed.totalDistance ?? { distance: '0', unit: 'Meters' },
+      avgPace: parsed.avgPace ?? '00:00',
       totalDuration: parsed.totalDuration ?? {
         duration: '00:00',
-        unit: 'seconds',
+        unit: 'Minutes',
       },
     };
   } catch (error) {
