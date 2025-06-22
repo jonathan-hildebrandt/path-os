@@ -11,6 +11,7 @@
 
 - refractor styles to use StyleSheets
 - test on android
+- test on ipad / android tablet
 - goal? notification?
 - background tracking?
 - assets?

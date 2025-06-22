@@ -182,21 +182,8 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
 
   return (
     <View style={[styles.container, themeContainerStyle]}>
-      <View
-        style={{
-          height: '60%',
-          width: '100%',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            alignItems: 'center',
-            width: '100%',
-          }}>
+      <View style={styles.anotherContainer}>
+        <View style={styles.andAnotherContainer}>
           <View style={styles.statCard}>
             <Text style={[styles.text, themeTextStyle]}>
               {msToMinutesAndSeconds(timer)}
@@ -231,21 +218,12 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
           </Text>
         </View>
       </View>
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'row',
-          gap: 20,
-          width: '100%',
-          height: '40%',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
+      <View style={styles.pauseContainer}>
         <Button
           variant='secondary'
           text={isPaused ? 'Resume' : 'Pause'}
-          style={{ width: 100, height: 40 }}
-          textStyle={{ fontSize: 18, lineHeight: 22, fontWeight: 'bold' }}
+          style={styles.buttonStyles}
+          textStyle={styles.buttonTextStyles}
           onPress={() => {
             if (isPaused) {
               resumeTracking();
@@ -258,8 +236,8 @@ export default function RunningScreen({ setIsRunning }: RunningScreenProps) {
           <Button
             variant='destructive'
             text='Stop'
-            style={{ width: 100, height: 40 }}
-            textStyle={{ fontSize: 18, lineHeight: 22, fontWeight: 'bold' }}
+            style={styles.buttonStyles}
+            textStyle={styles.buttonTextStyles}
             onPress={() => {
               stopTracking();
 
@@ -278,6 +256,37 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  anotherContainer: {
+    height: '60%',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  andAnotherContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    width: '100%',
+  },
+  buttonStyles: {
+    width: 100,
+    height: 40,
+  },
+  buttonTextStyles: {
+    fontSize: 18,
+    lineHeight: 22,
+    fontWeight: 'bold',
+  },
+  pauseContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    gap: 20,
+    width: '100%',
+    height: '40%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   lightThemeContainer: {
     backgroundColor: lightTheme.primary,
