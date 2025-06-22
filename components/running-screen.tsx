@@ -1,7 +1,7 @@
 import * as Location from 'expo-location';
 import { StatusBar } from 'expo-status-bar';
 import { Text, View, StyleSheet, useColorScheme } from 'react-native';
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Button from './button';
 import { darkTheme, lightTheme, radius } from '../lib/theme';
 import {

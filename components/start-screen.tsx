@@ -1,6 +1,14 @@
-import { StyleSheet, Text, useColorScheme, View } from 'react-native';
+import {
+  Alert,
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  useColorScheme,
+  View,
+} from 'react-native';
 import Button from './button';
-import { Dispatch, SetStateAction } from 'react';
+import * as Location from 'expo-location';
 import { darkTheme, lightTheme } from '../lib/theme';
 import { applyHexOpacity } from '../lib/utils';
 
@@ -57,7 +65,20 @@ export default function StartScreen({ setIsRunning }: StartScreenProps) {
             fontWeight: 'bold',
             textAlign: 'center',
           }}
-          onPress={() => {
+          onPress={async () => {
+            const { status } =
+              await Location.requestForegroundPermissionsAsync();
+
+            if (status !== 'granted') {
+              Alert.alert(
+                'Location Permission',
+                'PathOs requires location permission to track your run.',
+                [{ text: 'OK', style: 'destructive' }],
+                { cancelable: true }
+              );
+              return;
+            }
+
             setIsRunning(true);
           }}
           text={'Start'}

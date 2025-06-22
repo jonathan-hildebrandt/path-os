@@ -8,7 +8,5 @@
 
 ### ToDo's
 
-- request location permission right after start click and only show running screen when permission was granted
 - refractor styles to use StyleSheets
 - add splits ui
-- disable navigation when isRunning active
