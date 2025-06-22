@@ -10,6 +10,6 @@
 ### ToDo's
 
 - scrolling lagging?
-- goal? notification?
-- background tracking?
 - assets?
+- goal? notification? (optional)
+- background tracking? (optional)
