@@ -60,7 +60,6 @@ export default function HomeScreen() {
           setTime={setTime}
           setIsRunning={setIsRunning}
         />
-
         {isRunning && (
           <View style={StyleSheet.absoluteFill}>
             <RunningScreen setIsRunning={setIsRunning} />
