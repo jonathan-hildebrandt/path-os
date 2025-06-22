@@ -28,20 +28,32 @@ export default function Splits({ run }: SplitsProps) {
         borderColor:
           colorScheme === 'light' ? lightTheme.border : darkTheme.border,
       }}>
-      <Text style={{ fontWeight: isHeader ? 'bold' : 'normal', width: 60 }}>
+      <Text
+        style={[
+          { fontSize: 16, fontWeight: isHeader ? 'bold' : 'normal', flex: 1 },
+          themeTextStyle,
+        ]}>
         {km}
       </Text>
-      <Text style={{ fontWeight: isHeader ? 'bold' : 'normal', width: 80 }}>
+      <Text
+        style={[
+          { fontSize: 16, fontWeight: isHeader ? 'bold' : 'normal', flex: 1 },
+          themeTextStyle,
+        ]}>
         {pace}
       </Text>
-      <Text style={{ fontWeight: isHeader ? 'bold' : 'normal', width: 80 }}>
+      <Text
+        style={[
+          { fontSize: 16, fontWeight: isHeader ? 'bold' : 'normal', flex: 1 },
+          themeTextStyle,
+        ]}>
         {elevation}
       </Text>
     </View>
   );
 
   return (
-    <View>
+    <View style={{ width: '100%' }}>
       <Text style={[styles.heading, themeTextStyle]}>Splits</Text>
       <TableRow
         km='Km'
