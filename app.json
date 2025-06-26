@@ -14,6 +14,11 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
+      "icon": {
+        "dark": "./assets/ios-dark.png",
+        "light": "./assets/ios-light.png",
+        "tinted": "./assets/ios-tinted.png"
+      },
       "supportsTablet": true,
       "bundleIdentifier": "com.jonathan-hildebrandt.path-os"
     },
@@ -41,7 +46,19 @@
           "locationWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location while using the app."
         }
       ],
-      "expo-sqlite"
+      "expo-sqlite",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#fafafa",
+          "image": "./assets/splash-icon-light.png",
+          "dark": {
+            "image": "./assets/splash-icon-dark.png",
+            "backgroundColor": "#0a0a0a"
+          },
+          "imageWidth": 200
+        }
+      ]
     ],
     "extra": {
       "router": {},
