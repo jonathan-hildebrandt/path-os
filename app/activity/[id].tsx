@@ -13,6 +13,7 @@ import { getRunById } from '../../lib/query';
 import SingleOverviewScreen from '../../components/single-overview';
 import Splits from '../../components/splits';
 import Heading from '../../components/heading';
+import { StatusBar } from 'expo-status-bar';
 
 export default function RunActivityScreen() {
   const colorScheme = useColorScheme();
@@ -67,6 +68,7 @@ export default function RunActivityScreen() {
           <ActivityIndicator size={'small'} />
         </View>
       )}
+      <StatusBar style={'light'} />
     </SafeAreaView>
   );
 }
