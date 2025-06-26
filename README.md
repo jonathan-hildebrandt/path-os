@@ -9,7 +9,6 @@
 
 ### ToDo's
 
-- assets?
 - goal? notification? (optional)
 - background tracking? (optional)
 
